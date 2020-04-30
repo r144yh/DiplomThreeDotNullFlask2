@@ -1,30 +1,25 @@
-{% extends "material/base.html" %}
-
 {% block head %}
-<title>
-    {% block title %}
-    {% if title %}{{ title }} - Sportify{% else %}Sportify{% endif %}
-    {% endblock %}
-</title>
-{% block styles %}
-    {{ super() }}
-    <link rel="stylesheet" href="../static/forBase.css">
-{% endblock %}
-<meta charset='utf-8'>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-{% endblock %}
-
-{% block body_attribs %}
+<head>
+    <title>
+        {% block title %}
+        {% if title %}{{ title }} - Sportify{% else %}Sportify{% endif %}
+        {% endblock %}
+    </title>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+</head>
 {% endblock %}
 
+<body>
 {% block navbar %}
-<nav class="purple" role="navigation">
-    <div class="nav-wrapper">
-        <a href="{{ url_for('main') }}" class="brand-logo">Logo</a>
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
+<nav>
+    <div>
+        <a href="{{ url_for('main') }}">Главная</a>
+        <ul>
             <li><a href="#">Программы</a></li>
             <li><a href="{{ url_for('login') }}">Вход</a></li>
-            <li><a href="#">Регистрация</a></li>
+            <li><a href="{{ url_for('registration') }}">Регистрация</a></li>
         </ul>
     </div>
 </nav>
@@ -32,31 +27,4 @@
 
 {% block content %}
 {% endblock %}
-
-{% block footer %}
-<footer class="page-footer">
-          <div class="container">
-            <div class="row">
-              <div class="col l6 s12">
-                <h5 class="white-text">Footer Content</h5>
-                <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
-              </div>
-              <div class="col l4 offset-l2 s12">
-                <h5 class="white-text">Links</h5>
-                <ul>
-                  <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
-                  <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
-                  <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
-                  <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="footer-copyright">
-            <div class="container">
-            &copy; Copyright 2020 by <a href="#">Sportify</a>.
-            </div>
-          </div>
-        </footer>
-
-{% endblock %}
+</body>
