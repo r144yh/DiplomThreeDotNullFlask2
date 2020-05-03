@@ -9,10 +9,10 @@ create table uuser(
 	username char(15) not null,
 	email char(30) not null,
 	ppassword varchar(128) not null,
-	height integer,
-	weight integer,
+	height char(3) default '-',
+        weight char(3) default '-',
 	level char(15),
-	count_of_tran integer,
+	count_of_tran integer default 0,
     date_of_reg DATE DEFAULT CURRENT_DATE
 );
 

@@ -2,7 +2,7 @@ from flask import Flask, render_template, flash, redirect, url_for, request
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from config import Config
-from forms import LoginForm, RegistrationForm
+from forms import LoginForm, RegistrationForm, EditProfileForm
 from models import User, MyDB
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -71,9 +71,12 @@ def registration():
     if form.validate_on_submit():
         hash_password = generate_password_hash(form.password.data)
         db_conn = MyDB()
-        db_conn.query('INSERT INTO uuser(user_id, username, email, ppassword) '
-                      'VALUES(DEFAULT, %s, %s, %s)',
-                      (form.username.data, form.email.data, hash_password))
+        form.level.data = int(form.level.data)
+        db_conn.query('INSERT INTO uuser(user_id, username, email, ppassword, height, weight, age, gender, level,'
+                      ' count_of_tran) '
+                      'VALUES(DEFAULT, %s, %s, %s, DEFAULT, DEFAULT, %s, %s, %s, DEFAULT)',
+                      (form.username.data, form.email.data, hash_password, form.age.data, form.gender.data,
+                       form.level.data))
         db_conn.db_commit()
         return redirect(url_for('login'))
     return render_template('registration.html', title='Registration', form=form)
@@ -85,9 +88,34 @@ def profile(user_id):
     if current_user.id != user_id:
         return redirect(url_for('error_404'))
     db_conn = MyDB()
-    records = db_conn.query('SELECT username, email, height, weight, level, count_of_tran '
+    records = db_conn.query('SELECT username, email, height, weight, level, count_of_tran, date_of_reg '
                             'FROM uuser WHERE user_id = %s', (current_user.id,))
     return render_template('profile.html', title='Profile', records=records)
+
+
+@app.route('/edit_profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    form = EditProfileForm()
+    if form.validate_on_submit():
+        db_conn = MyDB()
+        db_conn.query(
+            'UPDATE uuser SET username = %s, email = %s, height = %s, weight = %s WHERE '
+            'user_id = %s',
+            (current_user.username, current_user.email, current_user.height, current_user.weight, current_user.id))
+        db_conn.db_commit()
+        return redirect(url_for('profile', user_id=current_user.id))
+    elif request.method == 'GET':
+        db_conn = MyDB()
+        db_conn.query('SELECT username, email, height, weight '
+                      'FROM uuser  '
+                      'WHERE user_id = %s',
+                      (current_user.id,))
+        form.username.data = current_user.username
+        form.email.data = current_user.userEmail
+        form.height.data = current_user.userHeight
+        form.weight.data = current_user.userWeight
+    return render_template('editProfile.html', title='Edit Profile', form=form)
 
 
 if __name__ == '__main__':

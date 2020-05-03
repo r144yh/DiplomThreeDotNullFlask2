@@ -6,9 +6,34 @@ from werkzeug.security import generate_password_hash, check_password_hash
 class User(UserMixin):
     def __init__(self, id):
         self.id = id
+        self.username = self.getName()
+        # self.userPhoto = self.getPhoto()
+        self.userEmail = self.getEmail()
+        self.userHeight = self.getHeight()
+        self.userWeight = self.getWeight()
 
     def __repr__(self):
         return "%d" % self.id
+
+    def getName(self):
+        conn = MyDB()
+        records = conn.query('SELECT username FROM uuser WHERE user_id = %s', (self.id,))
+        return records[0][0]
+
+    def getEmail(self):
+        conn = MyDB()
+        records = conn.query('SELECT email FROM uuser WHERE user_id = %s', (self.id,))
+        return records[0][0]
+
+    def getHeight(self):
+        conn = MyDB()
+        records = conn.query('SELECT height FROM uuser WHERE user_id = %s', (self.id,))
+        return records[0][0]
+
+    def getWeight(self):
+        conn = MyDB()
+        records = conn.query('SELECT weight FROM uuser WHERE user_id = %s', (self.id,))
+        return records[0][0]
 
     def check_password(self, password):
         conn = MyDB()
