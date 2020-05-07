@@ -47,7 +47,7 @@ class MyDB(object):
                                                password='Qwerty7', host='127.0.0.1', port='5432')
         self._db_cur = self._db_connection.cursor()
 
-    def query(self, query, params):
+    def query(self, query, params=None):
         self._db_cur.execute(query, params)
         try:
             _db_records = self._db_cur.fetchall()

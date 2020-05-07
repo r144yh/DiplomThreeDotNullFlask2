@@ -44,9 +44,12 @@ class RegistrationForm(FlaskForm):
                                         Length(min=2, max=25, message='Неверная длина пароля'),
                                         EqualTo('password', message='Пароли должны совпадать')])
     age = DateField('Дата рождения', format='%Y-%m-%d')
-    gender = SelectField('Пол', choices=[('Женский', 'Женский'), ('Мужской', 'Мужской'), ('Другой', 'Другой')])
-    level = RadioField('Уровень подготовки', choices=[('300', 'Новичок'), ('700', 'Средний'),
-                                                      ('1000', 'Профи')])
+    gender = SelectField('Пол', choices=[('Женский', 'Женский'), ('Мужской', 'Мужской')])
+    level = SelectField('Уровень физической подготовки', choices=[('300', 'Новичок'), ('700', 'Средний'),
+                                                                  ('1000', 'Профи')])
+    levelBody = SelectField('Ваша физическая форма', choices=[('Недостаточный вес', 'Имею недостаточный вес'),
+                                                              ('В пределах нормы', 'Форма в пределах нормы'),
+                                                              ('Избыточный вес', 'Имею избыточный вес')])
     submit = SubmitField('Зарегистрироваться')
 
     def validate_username(self, username):
@@ -66,21 +69,7 @@ class RegistrationForm(FlaskForm):
 
 class EditProfileForm(FlaskForm):
     username = StringField('Логин', validators=[DataRequired(), Length(min=2, max=15, message='Неверная длина логина')])
-    email = StringField('Email', validators=[DataRequired(), Email(message='Проверьте правильность ввода адреса')])
     height = DecimalField('Рост', validators=[NumberRange(min=0, max=300)])
     weight = DecimalField('Текущий вес', validators=[NumberRange(min=20, max=300)])
     submit = SubmitField('Сохранить изменения')
 
-    def validate_username(self, username):
-        user = username.data
-        db_conn = MyDB()
-        records = db_conn.query('SELECT username FROM uuser WHERE username = %s', (user,))
-        if records:
-            raise ValidationError('Данный Логин уже занят')
-
-    def validate_email(self, email):
-        mail = email.data
-        db_conn = MyDB()
-        records = db_conn.query('SELECT email FROM uuser WHERE email = %s', (mail,))
-        if records:
-            raise ValidationError('Данная почта уже зарегистрирована')

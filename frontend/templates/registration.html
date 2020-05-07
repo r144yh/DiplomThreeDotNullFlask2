@@ -41,15 +41,22 @@
     </p>
     <p>
         {{ form.gender.label }}<br>
-        {{ form.gender(size=32) }}
+        {{ form.gender(size=1) }}
         {% for error in form.gender.errors %}
         <span style="color: #e59090;">[{{ error }}]</span>
         {% endfor %}
     </p>
     <p>
         {{ form.level.label }}<br>
-        {{ form.level(size=32) }}
+        {{ form.level(size=1) }}
         {% for error in form.level.errors %}
+        <span style="color: #e59090;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.levelBody.label }}<br>
+        {{ form.levelBody(size=1) }}
+        {% for error in form.levelBody.errors %}
         <span style="color: #e59090;">[{{ error }}]</span>
         {% endfor %}
     </p>

@@ -6,15 +6,21 @@
 <h5>Эл.почта: {{ records[0][1] }}</h5>
 <h5>Рост: {{ records[0][2] }}</h5>
 <h5>Вес: {{ records[0][3] }}</h5>
-{% if records[0][4] <= 300 %}
+<h5>Дата Рождения: {{ records[0][4] }}</h5>
+<h5>Пол: {{ records[0][5] }}</h5>
+{% if records[0][6] <= 300 %}
     <h5>Текущий уровень: Новичок</h5>
-{% elif records[0][4] >= 700 and records[0][4] < 1000 %}
+{% elif records[0][6] >= 700 and records[0][6] < 1000 %}
     <h5>Текущий уровень: Средний</h5>
-{% elif records[0][4]  >= 1000 %}
+{% elif records[0][6]  >= 1000 %}
     <h5>Текущий уровень: Профи</h5>
 {% endif %}
-<h5>Кол-во баллов: {{ records[0][4] }}</h5>
-<h5>Кол-во тренировок: {{ records[0][5] }}</h5>
-<h5>Дата регистрации: {{ records[0][6] }}</h5>
+<h5>Физическая форма: {{ records[0][7] }}</h5>
+<h5>Кол-во баллов: {{ records[0][6] }}</h5>
+<h5>Кол-во тренировок: {{ records[0][8] }}</h5>
+<h5>Дата регистрации: {{ records[0][9] }}</h5>
 <a href="{{ url_for('edit_profile') }}">Изменить профиль</a>
+<video autoplay="autoplay" loop="loop" controls="controls">
+    <source src="../static/video/2.webm" type='video/webm'>
+</video>
 {% endblock %}
