@@ -5,14 +5,15 @@ from config import Config
 from forms import LoginForm, RegistrationForm, EditProfileForm
 from models import User, MyDB
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_material import Material
 
 app = Flask('__main__',
             template_folder='frontend/templates',
             static_folder='frontend/static')
+material = Material(app)
 app.config.from_object(Config)
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'
 
 
 @login_manager.user_loader
@@ -121,7 +122,7 @@ def edit_profile():
 @login_required
 def exercises():
     if current_user.is_anonymous:
-        return redirect(url_for('index'))
+        return redirect(url_for('main'))
     db_conn = MyDB()
     records = db_conn.query('SELECT name_of_ex, descr_of_ex, level_of_ex, type_of_ex, body_part, number_of_points '
                             'FROM exercise ')

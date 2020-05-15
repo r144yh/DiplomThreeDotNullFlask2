@@ -2,5 +2,27 @@
 
 {% block content %}
 <h1>Упражнения</h1>
-<h5>Никнейм: {{ records[0] }}</h5>
+{% for row in records %}
+<h5>Название: {{ row[0] }}</h5>
+<h5>Описание: {{ row[1] }}</h5>
+<h5>Уровень: {{ row[2] }}</h5>
+<h5>Направленность: {{ row[3] }}</h5>
+<h5>Часть тела: {{ row[4] }}</h5>
+<h5>Необходимое кол-во баллов: {{ row[5] }}</h5>
+
+  <div class="row">
+    <div class="col s12 m6">
+      <div class="card">
+        <div class="card-image">
+          <img src="images/sample-1.jpg">
+          <span class="card-title">Card Title</span>
+          <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">add</i></a>
+        </div>
+        <div class="card-content">
+          <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endfor %}
 {% endblock %}
