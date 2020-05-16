@@ -124,7 +124,8 @@ def exercises():
     if current_user.is_anonymous:
         return redirect(url_for('main'))
     db_conn = MyDB()
-    records = db_conn.query('SELECT name_of_ex, descr_of_ex, level_of_ex, type_of_ex, body_part, number_of_points '
+    records = db_conn.query('SELECT ex_id, name_of_ex, descr_of_ex, level_of_ex, type_of_ex, body_part, '
+                            'number_of_points '
                             'FROM exercise ')
     return render_template('exercises.html', title='Exercises', records=records)
 

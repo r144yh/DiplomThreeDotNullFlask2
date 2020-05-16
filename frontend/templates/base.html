@@ -3,7 +3,7 @@
 {% block head %}
 <title>
     {% block title %}
-    {% if title %}{{ title }} - Couch & Coach{% else %}Couch & Coach{% endif %}
+    {% if title %}{{ title }} • Couch & Coach{% else %}Couch & Coach{% endif %}
     {% endblock %}
 </title>
 {% block styles %}
@@ -23,7 +23,7 @@ flex-direction: column;
 {% block navbar %}
 <nav>
     <div class="nav-wrapper">
-        <a href="{{ url_for('index') }}" class="brand-logo center">Couch & Coach</a>
+        <a href="{{ url_for('index') }}" class="brand-logo center">Co&Co</a>
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
         <ul id="nav-mobile" class="left hide-on-med-and-down">
             <li><a href="#">Программы</a></li>
