@@ -1,25 +1,199 @@
 {% extends "base.html" %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet"
+      href="../static/css/UserProfile.css">
+<script src="../static/js/forUserProf.js"></script>
+<link href='https://fonts.googleapis.com/css?family=Quicksand:400,500,700&subset=latin-ext' rel="stylesheet">
+{% endblock %}
 
 {% block content %}
-<div style="color: #e59090">profile</div>
-<h5>Никнейм: {{ records[0][0] }}</h5>
-<h5>Эл.почта: {{ records[0][1] }}</h5>
-<h5>Рост: {{ records[0][2] }}</h5>
-<h5>Вес: {{ records[0][3] }}</h5>
-<h5>Дата Рождения: {{ records[0][4] }}</h5>
-<h5>Пол: {{ records[0][5] }}</h5>
-{% if records[0][6] <= 300 %}
-<h5>Текущий уровень: Новичок</h5>
-{% elif records[0][6] >= 700 and records[0][6] < 1000 %}
-<h5>Текущий уровень: Средний</h5>
-{% elif records[0][6]  >= 1000 %}
-<h5>Текущий уровень: Профи</h5>
-{% endif %}
-<h5>Физическая форма: {{ records[0][7] }}</h5>
-<h5>Кол-во баллов: {{ records[0][6] }}</h5>
-<h5>Кол-во тренировок: {{ records[0][8] }}</h5>
-<h5>Дата регистрации: {{ records[0][9] }}</h5>
-<a href="{{ url_for('edit_profile') }}">Изменить профиль</a>
+<div class="wrapper">
+    <div class="profile-card js-profile-card">
+        <div class="profile-card__img">
+            <img src="../static/video/{{current_user.userGender}}/{{current_user.userLevel}}/{{current_user.userPhys}}/exPhoto/0.png"
+                 alt="profile card">
+        </div>
+
+        <div class="profile-card__cnt js-profile-cnt">
+            <div class="profile-card__name">{{ records[0][0] }}</div>
+            <div class="profile-card__txt"><strong>Электронная почта: </strong>{{ records[0][1] }}</div>
+            <div class="profile-card-loc">
+            <span class="profile-card-loc__icon">
+
+            </span>
+                <span class="profile-card-loc__txt">
+            <b>Рост: </b>{{ records[0][2] }} см | <b>Вес: </b>{{ records[0][3] }} кг
+            </span>
+            </div>
+            <hr>
+            <div class="profile-card-loc">
+            <span class="profile-card-loc__icon">
+                <i class="material-icons right">import_export</i>
+            </span>
+                <span class="profile-card-loc__txt">
+            <b>Текущий уровень: </b>
+                {% if records[0][6] <= 300 %}
+                    Новичок
+                {% elif records[0][6] >= 700 and records[0][6] < 1000 %}
+                    Средний
+                {% elif records[0][6]  >= 1000 %}
+                    Профи
+                {% endif %}
+            </span>
+            </div>
+            <hr>
+            <div class="profile-card-loc">
+            <span class="profile-card-loc__icon">
+                <i class="material-icons right">fitness_center</i>
+            </span>
+                <span class="profile-card-loc__txt">
+            <b>Физическая форма: </b>{{ records[0][7] }}
+            </span>
+            </div>
+
+            <div class="profile-card-inf">
+                <div class="profile-card-inf__item">
+                    <div class="profile-card-inf__title">{{ records[0][6] }}</div>
+                    <div class="profile-card-inf__txt">Баллы</div>
+                </div>
+
+                <div class="profile-card-inf__item">
+                    <div class="profile-card-inf__title">{{ rev }}</div>
+                    <div class="profile-card-inf__txt">Дата Регистрации</div>
+                </div>
+
+                <div class="profile-card-inf__item">
+                    <div class="profile-card-inf__title">{{ records[0][8] }}</div>
+                    <div class="profile-card-inf__txt">Тренировки</div>
+                </div>
+            </div>
+
+            <div class="profile-card-social">
+                <div class="container">
+                    <b>Старт базовой тренировки: </b>
+                    <a href="#" class="profile-card-social__item twitter"
+                       target="_blank">
+                        <p class="icon-font">&#127789;</p>
+                    </a>
+                </div>
+                <br>
+                <div class="container">
+                    <b>Выбор нового упражнения: </b>
+                    <a href="#" class="profile-card-social__item instagram"
+                       target="_blank">
+                        <p class="icon-font">&#127829;</p>
+                    </a>
+                </div><br>
+                <div class="container">
+                    <b>Выбор новой программы: &nbsp; </b>
+                    <a href="#" class="profile-card-social__item twitter"
+                       target="_blank">
+                        <p class="icon-font" >&#127831;</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="profile-card-ctr">
+                <div class="center" style="margin: 0.5rem">
+                    <a href="#myEx" role="button" class="profile-card__button button--blue js-message-btn"
+                       type="button">Мои Упражнения</a>
+                </div>
+                <div class="center" style="margin: 0.5rem">
+                    <a href="{{ url_for('edit_profile') }}" role="button" class="profile-card__button button--orange"
+                       type="button"
+                       style="">Изменить профиль</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<svg hidden="hidden">
+    <defs>
+        <symbol id="icon-facebook" viewBox="0 0 32 32">
+            <title>facebook</title>
+        </symbol>
+
+        <symbol id="icon-instagram" viewBox="0 0 32 32">
+            <title>instagram</title>
+        </symbol>
+
+        <symbol id="icon-twitter" viewBox="0 0 32 32">
+            <title>twitter</title>
+        </symbol>
+    </defs>
+</svg>
+
+<div class="container" id="myEx">
+    <table class="striped highlight centered responsive-table">
+        <thead>
+        <tr>
+            <th>Название упражнения</th>
+            <th>Уровень подготовки</th>
+            <th>Сложность упражнения</th>
+            <th>Кол-во тренировок</th>
+            <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr>
+            <td>kek</td>
+            <td>kek</td>
+            <td>kek</td>
+            <td>0</td>
+            <td>
+                <button class="btn waves-effect waves-light" type="button">Go
+                    <i class="material-icons right">send</i>
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td>kek</td>
+            <td>kek</td>
+            <td>kek</td>
+            <td>0</td>
+            <td>
+                <button class="btn waves-effect waves-light" type="button">Go
+                    <i class="material-icons right">send</i>
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td>kek</td>
+            <td>kek</td>
+            <td>kek</td>
+            <td>0</td>
+            <td>
+                <button class="btn waves-effect waves-light" type="button">Go
+                    <i class="material-icons right">send</i>
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+</div><br>
+<!--<h5>Никнейм: {{ records[0][0] }}</h5>-->
+<!--<h5>Эл.почта: {{ records[0][1] }}</h5>-->
+<!--<h5>Рост: {{ records[0][2] }}</h5>-->
+<!--<h5>Вес: {{ records[0][3] }}</h5>-->
+<!--<h5>Дата Рождения: {{ records[0][4] }}</h5>-->
+<!--<h5>Пол: {{ records[0][5] }}</h5>-->
+<!--{% if records[0][6] <= 300 %}-->
+<!--Новичок-->
+<!--{% elif records[0][6] >= 700 and records[0][6] < 1000 %}-->
+<!--Средний-->
+<!--{% elif records[0][6]  >= 1000 %}-->
+<!--Профи-->
+<!--{% endif %}-->
+<!--<h5>Физическая форма: {{ records[0][7] }}</h5>-->
+<!--<h5>Кол-во баллов: {{ records[0][6] }}</h5>-->
+<!--<h5>Кол-во тренировок: {{ records[0][8] }}</h5>-->
+<!--<h5>Дата регистрации: {{ records[0][9] }}</h5>-->
+<!--<a href="{{ url_for('edit_profile') }}">Изменить профиль</a>-->
 <!--<video autoplay="autoplay" loop="loop" controls="controls">-->
 <!--    <source src="../static/video/2.webm" type='video/webm'>-->
 <!--</video>-->
@@ -27,3 +201,8 @@
     <iframe width="853" height="480" src="../static/video/2.webm" frameborder="0" allowfullscreen></iframe>
 </div>
 {% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+{% endblock scripts %}

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h3 class="center">Упражнения</h3>
+<h3 class="center" style="font-family: 'Playfair Display', serif;">Упражнения</h3>
 {% for row in records %}
 <div class="container" style="display: flex; justify-content: center">
     <div class="row">
@@ -11,9 +11,10 @@
                     <img class="activator"
                          src="../static/video/{{current_user.userGender}}/{{current_user.userLevel}}/{{current_user.userPhys}}/exPhoto/{{ row[0] }}.png">
                 </div>
-                <div class="card-content">
+                <div class="card-content" style="font-family: 'Playfair Display', serif;">
                     <span class="card-title activator grey-text text-darken-4">{{ row[1] }}
-                        <i class="material-icons right">more_vert</i></span>
+                        <i class="material-icons right">more_vert</i>
+                    </span>
                     <h5>Уровень: {{ row[3] }}</h5>
                     <hr>
                     <h5>Направленность: {{ row[4] }}</h5>
@@ -28,7 +29,7 @@
                     </span>
                     <h5>Описание: {{ row[2] }}</h5>
                 </div>
-                <a class="btn-floating halfway-fab waves-effect waves-light red btn-large">
+                <a class="btn-floating halfway-fab waves-effect waves-light red btn-large" id="{{ row[0] }}">
                     <i class="material-icons">add</i>
                 </a>
             </div>

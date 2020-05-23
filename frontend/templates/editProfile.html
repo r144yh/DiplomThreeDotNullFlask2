@@ -34,6 +34,10 @@
                 изменения
                 <i class="material-icons right">refresh</i>
             </button>
+            <span class="right" style="margin: 0.85rem">
+                    <a href="{{ url_for('profile', user_id=current_user.id) }}" role="button" class="btn waves-effect waves-light" type="button"
+                       style="">Вернуться в профиль</a>
+            </span>
         </div>
     </form>
 </div>

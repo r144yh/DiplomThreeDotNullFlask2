@@ -45,7 +45,7 @@ class RegistrationForm(FlaskForm):
                                         EqualTo('password', message='Пароли должны совпадать')])
     age = DateField('Дата рождения', format='%Y-%m-%d')
     gender = SelectField('Пол', choices=[('Женский', 'Женский'), ('Мужской', 'Мужской')])
-    level = SelectField('Уровень физической подготовки', choices=[('300', 'Новичок'), ('700', 'Средний'),
+    level = SelectField('Уровень физической подготовки', choices=[('0', 'Новичок'), ('700', 'Средний'),
                                                                   ('1000', 'Профи')])
     levelBody = SelectField('Ваша физическая форма', choices=[('Недостаточный вес', 'Имею недостаточный вес'),
                                                               ('В пределах нормы', 'Форма в пределах нормы'),
@@ -73,3 +73,7 @@ class EditProfileForm(FlaskForm):
     weight = DecimalField('Текущий вес', validators=[NumberRange(min=20, max=300)])
     submit = SubmitField('Сохранить изменения')
 
+
+class Exercise(FlaskForm):
+    exId = DecimalField('')
+    submit = SubmitField('+')

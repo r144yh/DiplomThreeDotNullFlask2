@@ -2,7 +2,7 @@ from flask import Flask, render_template, flash, redirect, url_for, request
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from config import Config
-from forms import LoginForm, RegistrationForm, EditProfileForm
+from forms import LoginForm, RegistrationForm, EditProfileForm, Exercise
 from models import User, MyDB
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_material import Material
@@ -91,7 +91,8 @@ def profile(user_id):
     records = db_conn.query('SELECT username, email, height, weight, age, gender, level, levelBody,'
                             ' count_of_tran, date_of_reg '
                             'FROM uuser WHERE user_id = %s', (current_user.id,))
-    return render_template('profile.html', title='Profile', records=records)
+    rev = records[0][9].strftime("%d/%m/%Y")
+    return render_template('profile.html', title='Profile', records=records, rev=rev)
 
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
@@ -121,12 +122,19 @@ def edit_profile():
 @app.route("/exercises", methods=['GET', 'POST'])
 @login_required
 def exercises():
-    if current_user.is_anonymous:
-        return redirect(url_for('main'))
+    form = Exercise()
     db_conn = MyDB()
     records = db_conn.query('SELECT ex_id, name_of_ex, descr_of_ex, level_of_ex, type_of_ex, body_part, '
                             'number_of_points '
                             'FROM exercise ')
+
+    if form.validate_on_submit():
+        form.level.data = int(form.level.data)
+
+        db_conn.query('UPDATE user_exercise SET user_id = DEFAULT, ex_id = %s, date_of_add = DEFAULT WHERE user_id = %s',
+                      current_user.id)
+        db_conn.db_commit()
+        return redirect(url_for('exercises'))
     return render_template('exercises.html', title='Exercises', records=records)
 
 

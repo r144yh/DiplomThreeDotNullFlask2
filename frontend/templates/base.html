@@ -8,7 +8,11 @@
 </title>
 {% block styles %}
 {{ super() }}
+<script src="../static/css/forBase.css"></script>
+<link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,100&display=swap" rel="stylesheet">
 {% endblock %}
+
 <meta charset='utf-8'>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
@@ -21,7 +25,7 @@ flex-direction: column;
 {% endblock %}
 
 {% block navbar %}
-<nav>
+<nav class="brown lighten-3" style="font-family: 'Montserrat', sans-serif;">
     <div class="nav-wrapper">
         <a href="{{ url_for('index') }}" class="brand-logo center">Co&Co</a>
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
@@ -74,5 +78,11 @@ flex-direction: column;
         </div>
     </div>
 </footer>
-
 {% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+{% endblock scripts %}
