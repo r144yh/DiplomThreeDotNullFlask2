@@ -95,8 +95,8 @@ def profile(user_id):
     rev = records[0][9].strftime("%d/%m/%Y")
     records2 = db_conn.query('SELECT user_exercise.ex_id, name_of_ex, count_of_workout, count_of_repeat, '
                              'count_of_last_ex, time_of_last_ex, date_of_ex, date_of_add '
-                             'FROM user_exercise, exercise '
-                             'WHERE exercise.ex_id = user_exercise.ex_id and user_id = %s', (current_user.id,))
+                             'FROM user_exercise INNER JOIN exercise ON user_exercise.ex_id = exercise.ex_id  '
+                             'WHERE user_id = %s', (current_user.id,))
     return render_template('profile.html', title='Profile', records=records, rev=rev, records2=records2)
 
 
@@ -115,7 +115,7 @@ def edit_profile():
     elif request.method == 'GET':
         db_conn = MyDB()
         db_conn.query('SELECT username, height, weight '
-                      'FROM uuser  '
+                      'FROM uuser '
                       'WHERE user_id = %s',
                       (current_user.id,))
         form.username.data = current_user.username
@@ -133,20 +133,22 @@ def exercises():
         db_conn = MyDB()
         records = db_conn.query('SELECT ex_id, name_of_ex, descr_of_ex, level_of_ex, type_of_ex, body_part, '
                                 'number_of_points '
-                                'FROM exercise ')
-
+                                'FROM exercise '
+                                'WHERE ex_id NOT IN (SELECT ex_id '
+                                'FROM user_exercise '
+                                'WHERE user_id = %s)',
+                                current_user.id)
         if form.validate_on_submit():
             db_conn.query(
-                'UPDATE uuser SET username = %s, height = %s, weight = %s WHERE '
-                'user_id = %s',
-                (form.username.data, form.height.data, form.weight.data, current_user.id))
+                'INSERT INTO user_exercise(user_ex_id, ex_id, user_id) '
+                'VALUES (DEFAULT, %s, %s)',
+                (form.exId.data, current_user.id))
             db_conn.db_commit()
             return redirect(url_for('profile', user_id=current_user.id))
     return render_template('exercises.html', title='Exercises', records=records, form=form)
 
 
-@app.route('/exercises/<ex_id>', methods=['GET', 'POST'])
-@login_required
+@app.route('/profile/exercises/<ex_id>', methods=['GET', 'POST'])
 def ex_page(ex_id):
     if current_user.is_anonymous:
         return redirect(url_for('index'))
@@ -154,7 +156,7 @@ def ex_page(ex_id):
         db_conn = MyDB()
         records = db_conn.query('SELECT * '
                                 'FROM exercise  NATURAL JOIN user_exercise '
-                                'WHERE exercise.ex_id = user_exercise.ex_id and user_id = %s and ex_id = %s',
+                                'WHERE user_id = %s and ex_id = %s',
                                 (current_user.id, ex_id))
     return render_template('ex_page.html', title='Profile', records=records)
 

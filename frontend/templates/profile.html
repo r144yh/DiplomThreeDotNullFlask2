@@ -141,12 +141,13 @@
         <tbody>
         {% for row in records2 %}
         <tr>
-            <td>{{ records2[0][1] }}</td>
-            <td>{{ records2[0][3] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[3] }}</td>
             <td>kek</td>
-            <td>{{ records2[0][2] }}</td>
+            <td>{{ row[2] }}</td>
             <td>
-                <button class="btn waves-effect waves-light" type="button"><a href="{{ url_for('exercises', ex_id=records2[0][0]) }}">Go</a>
+                <button class="btn waves-effect waves-light" type="button"
+                        onclick="document.location='exercises/{{row[0]}}'">Go
                     <i class="material-icons right">send</i>
                 </button>
             </td>
