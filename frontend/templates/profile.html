@@ -131,47 +131,27 @@
         <thead>
         <tr>
             <th>Название упражнения</th>
-            <th>Уровень подготовки</th>
-            <th>Сложность упражнения</th>
+            <th>Кол-во выполнений</th>
+            <th>Общее время</th>
             <th>Кол-во тренировок</th>
             <th></th>
         </tr>
         </thead>
 
         <tbody>
+        {% for row in records2 %}
         <tr>
+            <td>{{ records2[0][1] }}</td>
+            <td>{{ records2[0][3] }}</td>
             <td>kek</td>
-            <td>kek</td>
-            <td>kek</td>
-            <td>0</td>
+            <td>{{ records2[0][2] }}</td>
             <td>
-                <button class="btn waves-effect waves-light" type="button">Go
+                <button class="btn waves-effect waves-light" type="button"><a href="{{ url_for('exercises', ex_id=records2[0][0]) }}">Go</a>
                     <i class="material-icons right">send</i>
                 </button>
             </td>
         </tr>
-        <tr>
-            <td>kek</td>
-            <td>kek</td>
-            <td>kek</td>
-            <td>0</td>
-            <td>
-                <button class="btn waves-effect waves-light" type="button">Go
-                    <i class="material-icons right">send</i>
-                </button>
-            </td>
-        </tr>
-        <tr>
-            <td>kek</td>
-            <td>kek</td>
-            <td>kek</td>
-            <td>0</td>
-            <td>
-                <button class="btn waves-effect waves-light" type="button">Go
-                    <i class="material-icons right">send</i>
-                </button>
-            </td>
-        </tr>
+        {% endfor %}
         </tbody>
     </table>
     <br>

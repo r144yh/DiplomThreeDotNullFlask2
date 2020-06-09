@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h3 class="center" style="font-family: 'Playfair Display', serif;">Упражнения</h3>
+<h3 class="center" style="color: white; font-family: 'Playfair Display', serif;">Упражнения</h3>
 {% for row in records %}
 <div class="container" style="display: flex; justify-content: center">
     <div class="row">
@@ -29,12 +29,25 @@
                     </span>
                     <h5>Описание: {{ row[2] }}</h5>
                 </div>
-                <a class="btn-floating halfway-fab waves-effect waves-light red btn-large" id="{{ row[0] }}">
-                    <i class="material-icons">add</i>
-                </a>
+                <form action="" method="post">
+                    {{ form.hidden_tag() }}
+                    <input type="hidden" name="exId" id="exId" value="{{ row[0] }}">
+                    <button class="btn-floating halfway-fab waves-effect waves-light red btn-large"
+                            type="submit" name="action" onclick="addEx(id)">
+                        <i class="material-icons">add</i>
+                    </button>
+                </form>
             </div>
         </div>
     </div>
 </div>
 {% endfor %}
+
+<script>
+    function addEx(id) {
+        var btn = document.getElementById(id);
+        btn.disabled = true;
+    }
+
+</script>
 {% endblock %}

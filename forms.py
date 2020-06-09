@@ -75,5 +75,5 @@ class EditProfileForm(FlaskForm):
 
 
 class Exercise(FlaskForm):
-    exId = DecimalField('')
-    submit = SubmitField('+')
+    exId = DecimalField('Id')
+    submit = SubmitField('Добавить к себе')
