@@ -1,8 +1,50 @@
 {% extends "base.html" %}
-{% block styles %}
 
 {% block content %}
-<div style="color: #e59090">kek</div>
-{{records}}
+<br>
+<input type="text" name="time" id="time">
+<br>
+<button id="button" onclick="addBut()">Запустить</button>
+<br>
+<button id="button2">Стоп</button>
+<br>
+<div id="timer"></div>
+<br>
+<p id="demo"></p>
+<script>
+    function addBut() {
+        let timerInput = document.getElementById("time"); // Берём строку
+        let buttonRun = document.getElementById("button");// Берём кнопку запуска
+        let buttonStop = document.getElementById("button2");// Берём кнопку запуска
+        let timerShow = document.getElementById("timer"); // Берём блок для показа времени
+
+
+        let timeMinut = parseInt(timerInput.value) * 60;
+
+
+        let timer = setInterval(function () {
+            let seconds = timeMinut % 60; // Получаем секунды
+            let minutes = timeMinut / 60 % 60; // Получаем минуты
+            let hour = timeMinut / 60 / 60 % 60; // Получаем часы
+            // Условие если время закончилось то...
+            if (timeMinut <= 0) {
+                // Таймер удаляется
+                clearInterval(timer);
+                // Выводит сообщение что время закончилось
+                document.getElementById("demo").innerHTML = "EXPIRED";
+            } else { // Иначе
+                // Создаём строку с выводом времени
+                let strTimer = `${Math.trunc(hour)}:${Math.trunc(minutes)}:${seconds}`;
+                // Выводим строку в блок для показа таймера
+                timerShow.innerHTML = strTimer;
+            }
+            timeMinut--; // Уменьшаем таймер
+        }, 1000);
+
+        buttonStop.addEventListener('click', function () {
+            clearInterval(timer);
+        })
+    }
+</script>
 
 {% endblock %}
