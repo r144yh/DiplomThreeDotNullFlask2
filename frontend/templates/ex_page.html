@@ -3,62 +3,71 @@
 {% block content %}
 <div class="container">
     <br>
-    <input type="text" name="time" id="time" value="1">
+    <input type="text" name="time" id="time" value="1" hidden>
     <br>
     <button id="button" onclick="addBut()" class="btn waves-effect waves-light">Запустить</button>
     <br>
     <div id="timer"></div>
     <br>
-    <button id="button2" class="btn waves-effect waves-light">Стоп</button>
+    <div id="breakTimer"></div>
+    <br>
+    <button id="button2" class="btn waves-effect waves-light" disabled>Стоп</button>
     <br>
     <div>Текущее кол-во повторений:
-
         <p id="currentCounter">0</p>
     </div>
     <br>
     <div>Осталось выполнить:
-
         <p id="totalCounter">15</p>
     </div>
     <br>
     <p id="demo"></p>
     <br>
-    <button id="minusBtn" hidden>-</button>
-    <p id="counter" hidden></p>
-    <button id="plusBtn" hidden>+</button>
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <p hidden>
-            {{ form.count(value=0) }}
-        </p>
-    </form>
     <br>
-
     <button id="button3" class="btn waves-effect waves-light">Закончить тренировку</button>
     <br>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p hidden id="countP">
+            {{ form.count() }}
+        </p>
+        <div hidden id="subBut">
+            <p>
+            Потвердить кол-во повторений
+        </p>
+        <button class="btn waves-effect waves-light" type="submit" name="action" style="margin: 0.85rem">Подтвердить
+            <i class="material-icons right">restaurant</i>
+        </button>
+        </div>
+    </form>
+
 </div>
 <br>
+
+
 <script>
-
     let timerInput = document.getElementById("time"); // Берём строку
-    let buttonRun = document.getElementById("button");// Берём кнопку остановки таймера
-    let buttonStop = document.getElementById("button2");// Берём кнопку остановки таймера
-    let buttonStopEx = document.getElementById("button3");// Берём кнопку остановки тренировки
-    let timerShow = document.getElementById("timer"); // Берём блок для показа времени
-    let countInput = document.getElementById("count"); // Берём строку
-    let minusBtn = document.getElementById("minusBtn"); // Берём строку
-    let plusBtn = document.getElementById("plusBtn"); // Берём строку
-    let counter = document.getElementById("counter"); // Берём строку
-
-    let currentCounterStop = document.getElementById("currentCounter"); // Берём сколько осталось повторений
-
-    let totalCounterStop = document.getElementById("totalCounter"); // Берём сколько осталось
-
     let timeMinut = parseInt(timerInput.value) * 60; //Устанавливем время
-
-    buttonStopEx.disabled = true;
-
     function addBut() {
+
+        let buttonRun = document.getElementById("button");// Берём кнопку остановки таймера
+        let buttonStop = document.getElementById("button2");// Берём кнопку остановки таймера
+        let buttonStopEx = document.getElementById("button3");// Берём кнопку остановки тренировки
+        let timerShow = document.getElementById("timer"); // Берём блок для показа времени
+        let timerBreakShow = document.getElementById("breakTimer"); // Берём блок для показа времени
+        let countInput = document.getElementById("count"); // Берём строку
+        let countP = document.getElementById("countP"); // Берём строку
+        let subBut = document.getElementById("subBut"); // Берём строку
+
+        let currentCounterStop = document.getElementById("currentCounter"); // Берём сколько осталось повторений
+
+        let totalCounterStop = document.getElementById("totalCounter"); // Берём сколько осталось
+
+
+        let timeBreak = 10;
+        buttonStopEx.disabled = true;
+
+        buttonStop.disabled = false;
         buttonRun.disabled = true;
         let currentCounterShow = Number(currentCounterStop.textContent);
         let totalCounterShow = Number(totalCounterStop.textContent);
@@ -67,7 +76,7 @@
             let minutes = timeMinut / 60 % 60; // Получаем минуты
             let hour = timeMinut / 60 / 60 % 60; // Получаем часы
             // Условие если время закончилось то...
-            if (timeMinut <= 0 || buttonStop.onclick) {
+            if (timeMinut <= 0) {
                 // Таймер удаляется
                 clearInterval(timer);
                 // Выводит сообщение что время закончилось
@@ -81,7 +90,7 @@
             }
             timeMinut--; // Уменьшаем таймер
         }, 1000);
-
+        document.getElementById("demo").hidden = true;
         buttonStop.addEventListener('click', function () {
             clearInterval(timer);
             if (totalCounterShow >= 5) {
@@ -90,6 +99,26 @@
                 totalCounterShow -= 5;
                 totalCounterStop.innerHTML = totalCounterShow;
                 buttonRun.disabled = false;
+
+                let breakTime = setInterval(function () {
+                    let seconds = timeBreak % 60;
+                    let minutes = timeBreak / 60 % 60;
+                    let hour = timeBreak / 60 / 60 % 60;
+                    if (timeBreak <= 0) {
+                        clearInterval(breakTime);
+                        document.getElementById("demo").innerHTML = "Продолжайте тренировку";
+
+                        buttonRun.disabled = false;
+                        timerBreakShow.hidden = true;
+                    } else {
+                        buttonRun.disabled = true;
+                        buttonStop.disabled = true;
+                        timerBreakShow.hidden = false;
+                        let strBreakTimer = `${Math.trunc(hour)}:${Math.trunc(minutes)}:${seconds}`;
+                        timerBreakShow.innerHTML = strBreakTimer;
+                    }
+                    timeBreak--; // Уменьшаем таймер
+                }, 1000)
             }
             if (totalCounterShow === 0) {
                 buttonStop.disabled = true;
@@ -99,22 +128,15 @@
         });
 
         buttonStopEx.addEventListener('click', function () {
-            totalCounter()
+            totalCounter();
+            timerBreakShow.hidden = true;
+            subBut.hidden = false;
         });
 
         function totalCounter() {
-            counter.hidden = false;
-            minusBtn.hidden = false;
-            plusBtn.hidden = false;
-            counter.innerHTML = currentCounterShow;
-            var counterNumber = Number(counter.textContent);
-
-            plusBtn.onclick = function () {
-                counterNumber++
-            };
-            minusBtn.onclick = function () {
-                counterNumber--
-            }
+            countInput.hidden = false;
+            countP.hidden = false;
+            countInput.setAttribute('value', currentCounterShow);
         }
     }
 

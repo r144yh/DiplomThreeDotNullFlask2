@@ -159,6 +159,14 @@ def ex_page(ex_id):
                                 'FROM exercise  NATURAL JOIN user_exercise '
                                 'WHERE user_id = %s and ex_id = %s',
                                 (current_user.id, ex_id))
+        if form.validate_on_submit():
+            db_conn.query(
+                'UPDATE user_exercise SET count_of_repeat = count_of_repeat + %s, count_of_workout =  '
+                'count_of_workout + 1 '
+                'WHERE ex_id = %s and user_id = %s ',
+                (form.count.data, ex_id, current_user.id))
+            db_conn.db_commit()
+            return redirect(url_for('profile', user_id=current_user.id))
     return render_template('ex_page.html', title='Profile', records=records, form=form)
 
 
