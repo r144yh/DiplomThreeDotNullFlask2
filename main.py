@@ -2,7 +2,7 @@ from flask import Flask, render_template, flash, redirect, url_for, request, jso
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from config import Config
-from forms import LoginForm, RegistrationForm, EditProfileForm, Exercise
+from forms import LoginForm, RegistrationForm, EditProfileForm, Exercise, ExercisePage
 from models import User, MyDB
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_material import Material
@@ -153,12 +153,13 @@ def ex_page(ex_id):
     if current_user.is_anonymous:
         return redirect(url_for('index'))
     else:
+        form = ExercisePage()
         db_conn = MyDB()
         records = db_conn.query('SELECT * '
                                 'FROM exercise  NATURAL JOIN user_exercise '
                                 'WHERE user_id = %s and ex_id = %s',
                                 (current_user.id, ex_id))
-    return render_template('ex_page.html', title='Profile', records=records)
+    return render_template('ex_page.html', title='Profile', records=records, form=form)
 
 
 if __name__ == '__main__':
