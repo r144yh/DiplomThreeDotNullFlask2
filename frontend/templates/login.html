@@ -1,31 +1,43 @@
 {% extends "base.html" %}
 
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet"
+      href="../static/css/">
+{% endblock %}
+
 {% block content %}
-<h1 style="margin: 0.85rem">Вход</h1>
-<div class="row">
-    <form action="" method="post" novalidate class="col s10">
-        {{ form.hidden_tag() }}
-        <div class="row">
-            <div class="input-field col s12">
-                <i class="material-icons prefix">account_circle</i>
-                {{ form.username.label }}
-                {{ form.username(id="icon_prefix", class="validate") }}
-                {% for error in form.username.errors %}
-                <span style="color: #e59090;">[{{ error }}]</span>
-                {% endfor %}
+<div style="flex: 1 0 auto; background: linear-gradient(#9492a7, whitesmoke);">
+    <h3 style="margin: 0.85rem; font-family: 'Montserrat', sans-serif;" class="center white-text">Вход</h3><br><br>
+    <div class="row container">
+        <div class="col s12 m4 l4 center"></div>
+        <form action="" method="post" novalidate class="col s12 m4 l4 center">
+            {{ form.hidden_tag() }}
+            <div class="row white-text" >
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">account_circle</i>
+                    {{ form.username.label }}
+                    {{ form.username(id="icon_prefix", class="validate") }}
+                    {% for error in form.username.errors %}
+                    <span style="color: #e59090;">[{{ error }}]</span>
+                    {% endfor %}
+                </div>
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">fingerprint</i>
+                    {{ form.password.label }}
+                    {{ form.password(id="icon_prefix", class="validate") }}
+                    {% for error in form.password.errors %}
+                    <span style="color: #e59090;">[{{ error }}]</span>
+                    {% endfor %}
+                </div>
+                <button class="btn waves-effect waves-light indigo lighten-4" type="submit" name="action" style="margin: 0.85rem">Войти
+                    <i class="material-icons right">fitness_center</i>
+                </button>
             </div>
-            <div class="input-field col s12">
-                <i class="material-icons prefix">fingerprint</i>
-                {{ form.password.label }}
-                {{ form.password(id="icon_prefix", class="validate") }}
-                {% for error in form.password.errors %}
-                <span style="color: #e59090;">[{{ error }}]</span>
-                {% endfor %}
-            </div>
-            <button class="btn waves-effect waves-light" type="submit" name="action" style="margin: 0.85rem">Войти
-                <i class="material-icons right">fitness_center</i>
-            </button>
+        </form>
+        <div class="col s12 m4 l4">
         </div>
-    </form>
+    </div>
+
 </div>
 {% endblock %}

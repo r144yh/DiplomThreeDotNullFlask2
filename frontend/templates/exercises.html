@@ -1,11 +1,66 @@
 {% extends "base.html" %}
 
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet"
+      href="../static/css/BasePage.css">
+{% endblock %}
+
 {% block content %}
+<div id="parallax-world-of-ugg">
+    <section>
+        <div class="title">
+            <h3>Упражнения</h3>
+            <h1>С Couch&Coach</h1>
+        </div>
+    </section>
+    {% for row in records %}
+    <section>
+        <div class="parallax-one">
+            <h2>{{ row[1] }}</h2>
+        </div>
+    </section>
+    <section>
+        <div class="title">
+            <h3>Уровень:</h3>
+            <h1>{{ row[3] }}</h1>
+            <p class="line-break margin-top-10"></p>
+            <h3>Направленность:</h3>
+            <h1>{{ row[4] }}</h1>
+            <p class="line-break margin-top-10"></p>
+            <h3>Часть тела:</h3>
+            <h1>{{ row[5] }}</h1>
+            <p class="line-break margin-top-10"></p>
+            <h3>Необходимое кол-во баллов:</h3>
+            <h1>{{ row[6] }}</h1>
+            <p class="line-break margin-top-10"></p><br>
+            <h3>Добавить к себе:</h3>
+        </div>
+    </section>
+    <div class="container center">
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <input type="hidden" name="exId" id="exId" value="{{ row[0] }}">
+            <button class="btn-floating btn-large waves-effect waves-light indigo lighten-4 center"
+                    type="submit" name="action" onclick="addEx(id)">
+                <i class="material-icons">add</i>
+            </button>
+        </form>
+    </div><br>
+    {% endfor %}
+    <div class="title">
+        <h3>Start the changes</h3>
+        <h1>with yourself</h1>
+    </div>
+</div>
+
+
 <h3 class="center" style="color: white; font-family: 'Playfair Display', serif;">Упражнения</h3>
 {% for row in records %}
 <div class="container" style="display: flex; justify-content: center">
     <div class="row">
-        <div class="col s12 m12 l12 z-depth-3" style="padding-bottom: 1.875rem">
+        <div class="col s12 m12 l4"></div>
+        <div class="col s12 m12 l4 " style="padding-bottom: 1.875rem">
             <div class="card z-depth-5 hoverable">
                 <div class="card-image waves-effect waves-block waves-light">
                     <img class="activator"
@@ -15,13 +70,11 @@
                     <span class="card-title activator grey-text text-darken-4">{{ row[1] }}
                         <i class="material-icons right">more_vert</i>
                     </span>
-                    <h5>Уровень: {{ row[3] }}</h5>
+                    <h5>Уровень:</h5> {{ row[3] }}
+                    <h5>Направленность:</h5> {{ row[4] }}
+                    <h5>Часть тела:</h5> {{ row[5] }}
                     <hr>
-                    <h5>Направленность: {{ row[4] }}</h5>
-                    <hr>
-                    <h5>Часть тела: {{ row[5] }}</h5>
-                    <hr>
-                    <h5>Необходимое кол-во баллов: {{ row[6] }}</h5>
+                    <h5>Необходимое кол-во баллов:</h5> {{ row[6] }}
                 </div>
                 <div class="card-reveal">
                     <span class="card-title grey-text text-darken-4">{{ row[1] }}
@@ -29,18 +82,12 @@
                     </span>
                     <h5>Описание: {{ row[2] }}</h5>
                 </div>
-                <form action="" method="post">
-                    {{ form.hidden_tag() }}
-                    <input type="hidden" name="exId" id="exId" value="{{ row[0] }}">
-                    <button class="btn-floating halfway-fab waves-effect waves-light red btn-large"
-                            type="submit" name="action" onclick="addEx(id)">
-                        <i class="material-icons">add</i>
-                    </button>
-                </form>
+
             </div>
         </div>
     </div>
-</div>
+    <div class="col s12 m12 l4"></div>
+</div><br><br>
 {% endfor %}
 
 <script>

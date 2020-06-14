@@ -33,9 +33,6 @@ a, a:hover {
   padding: 50px 20px;
   padding-top: 100px;
   display: flex;
-  background-image: linear-gradient(-20deg, #d7ccc8 0%, #607d8b 100%);
-  display: flex;
-  background-image: linear-gradient(-20deg, #d7ccc8 0%, #607d8b 100%);
 }
 @media screen and (max-width: 768px) {
   .wrapper {

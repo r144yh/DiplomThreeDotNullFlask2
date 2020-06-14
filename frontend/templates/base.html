@@ -8,7 +8,6 @@
 </title>
 {% block styles %}
 {{ super() }}
-<script src="../static/css/forBase.css"></script>
 <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,100&display=swap" rel="stylesheet">
 {% endblock %}
@@ -19,25 +18,26 @@
 {% endblock %}
 
 {% block body_attribs %}
-style = "display: flex;  min-height: 100vh; flex-direction: column;"
+style = "display: flex;  min-height: 100vh; flex-direction: column;" class = "white"
 {% endblock %}
 
 {% block navbar %}
-<nav class="brown lighten-3" style="font-family: 'Montserrat', sans-serif;">
+<nav class="white" style="font-family: 'Montserrat', sans-serif;">
     <div class="nav-wrapper">
-        <a href="{{ url_for('index') }}" class="brand-logo center">Co&Co</a>
-        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-        <ul id="nav-mobile" class="left hide-on-med-and-down">
-            <li><a href="#">Программы</a></li>
-            <li><a href="{{ url_for('exercises') }}">Упражнения</a></li>
+        <b><a href="{{ url_for('index') }}" class="brand-logo center blue-grey-text">Co&Co</a></b>
+        <a href="#" data-target="mobile-demo" class="sidenav-trigger blue-grey-text"><i class="material-icons">menu</i></a>
+        <ul id="nav-mobile" class="left hide-on-med-and-down" >
+            <li><b><a href="{{ url_for('training') }}" class="blue-grey-text">Программы</a></b></li>
+            <li><b><a href="{{ url_for('exercises') }}" class="blue-grey-text">Упражнения</a></b></li>
         </ul>
         <ul class="right hide-on-med-and-down">
             {% if current_user.is_anonymous %}
-            <li><a href="{{ url_for('login') }}">Вход</a></li>
-            <li><a href="{{ url_for('registration') }}">Регистрация</a></li>
+            <li><b><a href="{{ url_for('login') }}" class="blue-grey-text">Вход</a></b></li>
+            <li><b><a href="{{ url_for('registration') }}" class="blue-grey-text">Регистрация</a></b></li>
             {% else %}
-            <li><a href="{{ url_for('profile', user_id=current_user.id) }}">Профиль</a></li>
-            <li><a href="{{ url_for('logout') }}">Выход</a></li>
+            <li><b><a href="{{ url_for('profile', user_id=current_user.id) }}" class="blue-grey-text">Начать тренировку</a></b></li>
+            <li><b><a href="{{ url_for('profile', user_id=current_user.id) }}" class="blue-grey-text">Профиль</a></b></li>
+            <li><b><a href="{{ url_for('logout') }}" class="blue-grey-text">Выход</a></b></li>
             {% endif %}
         </ul>
     </div>
@@ -51,28 +51,27 @@ style = "display: flex;  min-height: 100vh; flex-direction: column;"
 {% endblock %}
 
 {% block footer %}
-<footer class="page-footer">
+<footer class="page-footer grey lighten-1" style="background: linear-gradient(#9492a7, #f9f6ff);">
     <div class="container">
         <div class="row">
             <div class="col l6 s12">
-                <h5 class="white-text">Footer Content</h5>
-                <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer
-                    content.</p>
+                <h5 class="white-text">Co&Co - More realistic than Sims</h5><hr>
+                <p class="grey-text text-lighten-4">Подборка состава тренировок и упражнений на основе личных предпочтений</p>
             </div>
             <div class="col l4 offset-l2 s12">
-                <h5 class="white-text">Links</h5>
+                <h5 class="white-text">О Couch & Coach</h5><hr>
                 <ul>
-                    <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
-                    <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
-                    <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
-                    <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+                    <li><a class="grey-text text-lighten-3" href="#!"> > Стандартные программы тренировок</a></li>
+                    <li><a class="grey-text text-lighten-3" href="#!"> > Составление собственных тренировок</a></li>
+                    <li><a class="grey-text text-lighten-3" href="#!"></a></li>
+                    <li><a class="grey-text text-lighten-3" href="#!"></a></li>
                 </ul>
             </div>
         </div>
     </div>
     <div class="footer-copyright">
-        <div class="container">
-            &copy; Copyright 2020 by <a href="#">Couch & Coach</a>.
+        <div class="container grey-text">
+          <p> &copy; Copyright 2020 by <a href="{{ url_for('index') }}" style="color: grey">Couch & Coach</a></p>
         </div>
     </div>
 </footer>

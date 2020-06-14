@@ -2,7 +2,7 @@ from flask import Flask, render_template, flash, redirect, url_for, request, jso
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from config import Config
-from forms import LoginForm, RegistrationForm, EditProfileForm, Exercise, ExercisePage
+from forms import LoginForm, RegistrationForm, EditProfileForm, Exercise, ExercisePage, Training
 from models import User, MyDB
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_material import Material
@@ -97,7 +97,10 @@ def profile(user_id):
                              'count_of_last_ex, time_of_last_ex, date_of_ex, date_of_add '
                              'FROM user_exercise INNER JOIN exercise ON user_exercise.ex_id = exercise.ex_id  '
                              'WHERE user_id = %s', (current_user.id,))
-    return render_template('profile.html', title='Profile', records=records, rev=rev, records2=records2)
+    major = True
+    if records2 == []:
+        major = False
+    return render_template('profile.html', title='Profile', records=records, rev=rev, records2=records2, major=major)
 
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
@@ -156,7 +159,7 @@ def ex_page(ex_id):
         form = ExercisePage()
         db_conn = MyDB()
         records = db_conn.query('SELECT * '
-                                'FROM exercise  NATURAL JOIN user_exercise '
+                                'FROM exercise NATURAL JOIN user_exercise '
                                 'WHERE user_id = %s and ex_id = %s',
                                 (current_user.id, ex_id))
         if form.validate_on_submit():
@@ -166,8 +169,19 @@ def ex_page(ex_id):
                 'WHERE ex_id = %s and user_id = %s ',
                 (form.count.data, ex_id, current_user.id))
             db_conn.db_commit()
+            db_conn.query(
+                'UPDATE uuser SET count_of_tran = count_of_tran + 1, level = level + 20 '
+                'WHERE user_id = %s ',
+                (current_user.id,))
+            db_conn.db_commit()
             return redirect(url_for('profile', user_id=current_user.id))
     return render_template('ex_page.html', title='Profile', records=records, form=form)
+
+
+@app.route("/training", methods=['GET', 'POST'])
+def training():
+    form = Training()
+    return render_template('training.html', title='Exercises', form=form)
 
 
 if __name__ == '__main__':

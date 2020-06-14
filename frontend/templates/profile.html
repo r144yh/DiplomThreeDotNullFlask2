@@ -3,7 +3,9 @@
 {% block styles %}
 {{ super() }}
 <link rel="stylesheet"
-      href="../static/css/UserProfile.css">
+      href="../static/css/UsProfileV.css">
+<link rel="stylesheet"
+      href="../static/css/forTable.less">
 <script src="../static/js/forUserProf.js"></script>
 <link href='https://fonts.googleapis.com/css?family=Quicksand:400,500,700&subset=latin-ext' rel="stylesheet">
 {% endblock %}
@@ -81,16 +83,17 @@
                 <br>
                 <div class="container">
                     <b>Выбор нового упражнения: </b>
-                    <a href="#" class="profile-card-social__item instagram"
+                    <a href="{{ url_for('exercises') }}" class="profile-card-social__item instagram"
                        target="_blank">
                         <p class="icon-font">&#127829;</p>
                     </a>
-                </div><br>
+                </div>
+                <br>
                 <div class="container">
                     <b>Выбор новой программы: &nbsp; </b>
                     <a href="#" class="profile-card-social__item twitter"
                        target="_blank">
-                        <p class="icon-font" >&#127831;</p>
+                        <p class="icon-font">&#127831;</p>
                     </a>
                 </div>
             </div>
@@ -126,6 +129,7 @@
         </symbol>
     </defs>
 </svg>
+{% if major %}
 
 <div class="container" id="myEx">
     <table class="striped highlight centered responsive-table">
@@ -147,7 +151,7 @@
             <td>kek</td>
             <td>{{ row[2] }}</td>
             <td>
-                <button class="btn waves-effect waves-light" type="button"
+                <button class="btn waves-effect waves-light indigo lighten-4" type="button"
                         onclick="document.location='exercises/{{row[0]}}'">Go
                     <i class="material-icons right">send</i>
                 </button>
@@ -158,30 +162,12 @@
     </table>
     <br>
 </div><br>
-<!--<h5>Никнейм: {{ records[0][0] }}</h5>-->
-<!--<h5>Эл.почта: {{ records[0][1] }}</h5>-->
-<!--<h5>Рост: {{ records[0][2] }}</h5>-->
-<!--<h5>Вес: {{ records[0][3] }}</h5>-->
-<!--<h5>Дата Рождения: {{ records[0][4] }}</h5>-->
-<!--<h5>Пол: {{ records[0][5] }}</h5>-->
-<!--{% if records[0][6] <= 300 %}-->
-<!--Новичок-->
-<!--{% elif records[0][6] >= 700 and records[0][6] < 1000 %}-->
-<!--Средний-->
-<!--{% elif records[0][6]  >= 1000 %}-->
-<!--Профи-->
-<!--{% endif %}-->
-<!--<h5>Физическая форма: {{ records[0][7] }}</h5>-->
-<!--<h5>Кол-во баллов: {{ records[0][6] }}</h5>-->
-<!--<h5>Кол-во тренировок: {{ records[0][8] }}</h5>-->
-<!--<h5>Дата регистрации: {{ records[0][9] }}</h5>-->
-<!--<a href="{{ url_for('edit_profile') }}">Изменить профиль</a>-->
-<!--<video autoplay="autoplay" loop="loop" controls="controls">-->
-<!--    <source src="../static/video/2.webm" type='video/webm'>-->
-<!--</video>-->
-<div class="video-container">
-    <iframe width="853" height="480" src="../static/video/2.webm" frameborder="0" allowfullscreen></iframe>
+{% endif %}
+
+<div class="responsive-video controls center">
+    <iframe width="840" height="480" src="../static/video/2.webm" allowfullscreen></iframe>
 </div>
+
 {% endblock %}
 
 {% block scripts %}

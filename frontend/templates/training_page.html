@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet"
+      href="../static/css/BasePage.css">
+{% endblock %}
+
+{% block content %}
+<div id="parallax-world-of-ugg">
+    <section>
+        <div class="title">
+            <h3>Тренировки с Couch&Coach</h3>
+            <h1>Глубокие приседания</h1>
+        </div>
+    </section>
+    <div class="responsive-video controls left" style="margin-left: 30px">
+        <iframe width="840" height="480" src="../static/video/2.webm" allowfullscreen></iframe>
+    </div>
+    <br><br>
+    <section class="center">
+        <button class="btn-floating btn-large waves-effect waves-light teal accent-2 center" id="button" onclick="addBut()">
+            <i class="material-icons">play_arrow</i>
+        </button>
+    </section>
+    <section class="center">
+        <input type="text" name="time" id="time" value="1" hidden>
+        <h3>Время для тренировки</h3>
+        <h1 id="timer"></h1>
+        <hr>
+
+        <h3>Текущее кол-во повторений:</h3>
+        <h1 id="currentCounter">0</h1>
+        <h3>Осталось выполнить:</h3>
+        <h1 id="totalCounter">15</h1>
+        <hr>
+
+        <h3>Время для отдыха</h3>
+        <button id="button2" class="btn-floating  waves-effect waves-light teal accent-2" disabled>
+            <i class="material-icons">pause</i>
+        </button>
+        <h1 id="breakTimer"></h1>
+    </section>
+    <br>
+    <hr>
+    <section class="center">
+        <button id="button3" class="btn-large waves-effect waves-light pink lighten-4">Закончить тренировку</button>
+    </section>
+
+    <br>
+
+
+    <p id="demo"></p>
+    <br>
+    <br>
+
+    <br>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p hidden id="countP">
+            {{ form.count() }}
+        </p>
+        <div hidden id="subBut">
+            <p>
+                Потвердить кол-во повторений
+            </p>
+            <button class="btn waves-effect waves-light" type="button" name="action" style="margin: 0.85rem">Подтвердить
+                <i class="material-icons right">restaurant</i>
+            </button>
+        </div>
+    </form>
+
+</div>
+<br>
+
+
+<script>
+    let timerInput = document.getElementById("time"); // Берём строку
+    let timeMinut = parseInt(timerInput.value) * 60; //Устанавливем время
+    function addBut() {
+
+        let buttonRun = document.getElementById("button");// Берём кнопку остановки таймера
+        let buttonStop = document.getElementById("button2");// Берём кнопку остановки таймера
+        let buttonStopEx = document.getElementById("button3");// Берём кнопку остановки тренировки
+        let timerShow = document.getElementById("timer"); // Берём блок для показа времени
+        let timerBreakShow = document.getElementById("breakTimer"); // Берём блок для показа времени
+        let countInput = document.getElementById("count"); // Берём строку
+        let countP = document.getElementById("countP"); // Берём строку
+        let subBut = document.getElementById("subBut"); // Берём строку
+
+        let currentCounterStop = document.getElementById("currentCounter"); // Берём сколько осталось повторений
+
+        let totalCounterStop = document.getElementById("totalCounter"); // Берём сколько осталось
+
+
+        let timeBreak = 10;
+        buttonStopEx.disabled = true;
+
+        buttonStop.disabled = false;
+        buttonRun.disabled = true;
+        let currentCounterShow = Number(currentCounterStop.textContent);
+        let totalCounterShow = Number(totalCounterStop.textContent);
+        let timer = setInterval(function () {
+            let seconds = timeMinut % 60; // Получаем секунды
+            let minutes = timeMinut / 60 % 60; // Получаем минуты
+            let hour = timeMinut / 60 / 60 % 60; // Получаем часы
+            // Условие если время закончилось то...
+            if (timeMinut <= 0) {
+                // Таймер удаляется
+                clearInterval(timer);
+                // Выводит сообщение что время закончилось
+                document.getElementById("demo").innerHTML = "Время вышло";
+                buttonStopEx.disabled = false;
+            } else { // Иначе
+                // Создаём строку с выводом времени
+                let strTimer = `${Math.trunc(hour)}:${Math.trunc(minutes)}:${seconds}`;
+                // Выводим строку в блок для показа таймера
+                timerShow.innerHTML = strTimer;
+            }
+            timeMinut--; // Уменьшаем таймер
+        }, 1000);
+        document.getElementById("demo").hidden = true;
+        buttonStop.addEventListener('click', function () {
+            clearInterval(timer);
+            if (totalCounterShow >= 5) {
+                currentCounterShow += 5;
+                currentCounterStop.innerHTML = currentCounterShow;
+                totalCounterShow -= 5;
+                totalCounterStop.innerHTML = totalCounterShow;
+                buttonRun.disabled = false;
+
+                let breakTime = setInterval(function () {
+                    let seconds = timeBreak % 60;
+                    let minutes = timeBreak / 60 % 60;
+                    let hour = timeBreak / 60 / 60 % 60;
+                    if (timeBreak <= 0) {
+                        clearInterval(breakTime);
+                        document.getElementById("demo").innerHTML = "Продолжайте тренировку";
+
+                        buttonRun.disabled = false;
+                        timerBreakShow.hidden = true;
+                    } else {
+                        buttonRun.disabled = true;
+                        buttonStop.disabled = true;
+                        timerBreakShow.hidden = false;
+                        let strBreakTimer = `${Math.trunc(hour)}:${Math.trunc(minutes)}:${seconds}`;
+                        timerBreakShow.innerHTML = strBreakTimer;
+                    }
+                    timeBreak--; // Уменьшаем таймер
+                }, 1000)
+            }
+            if (totalCounterShow === 0) {
+                buttonStop.disabled = true;
+                buttonRun.disabled = true;
+                buttonStopEx.disabled = false;
+            }
+        });
+
+        buttonStopEx.addEventListener('click', function () {
+            totalCounter();
+            timerBreakShow.hidden = true;
+            subBut.hidden = false;
+        });
+
+        function totalCounter() {
+            countInput.hidden = false;
+            countP.hidden = false;
+            countInput.setAttribute('value', currentCounterShow);
+        }
+    }
+
+
+</script>
+
+{% endblock %}

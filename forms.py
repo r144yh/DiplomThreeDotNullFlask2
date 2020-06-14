@@ -82,3 +82,9 @@ class Exercise(FlaskForm):
 class ExercisePage(FlaskForm):
     count = DecimalField('Кол-во повторений', validators=[NumberRange(min=0, max=300)])
     submit = SubmitField('Подтвердить')
+
+
+class Training(FlaskForm):
+    count = DecimalField('Кол-во повторений', validators=[NumberRange(min=0, max=300)])
+    exId = DecimalField('Id')
+    submit = SubmitField('Добавить к себе')

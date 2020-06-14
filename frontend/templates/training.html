@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet"
+      href="../static/css/BasePage.css">
+{% endblock %}
+
+{% block content %}
+<div id="parallax-world-of-ugg">
+    <section>
+        <div class="title">
+            <h3>Тренировки с Couch&Coach</h3>
+            <h1>Программы тренировок</h1>
+        </div>
+    </section>
+    <div class="responsive-video controls right" style="margin-left: 30px">
+        <iframe width="840" height="480" src="../static/video/2.webm" allowfullscreen></iframe>
+    </div>
+    <br><br>
+    <section class="center">
+        <input type="text" name="time" id="time" value="1" hidden>
+        <h1>Утренняя зарядка</h1>
+        <hr>
+
+        <h3>Описание программы:</h3>
+        <h1 id="currentCounter">Спорт и хороший сон всегда идут рука об руку. Запуская активный обмен веществ с самого
+            утра, вы создаете правильный баланс гормонов в теле, который необходим для здорового сна.</h1>
+
+        <h3>Сложность программы:</h3>
+        <h1 id="breakTimer">Лёгкая</h1>
+
+        <h3>Группы мышц:</h3>
+        <h1 id="breakTimer">Всё тело</h1>
+    </section>
+    <br>
+    <hr>
+    <section class="center">
+        <button id="button3" class="btn-large waves-effect waves-light pink lighten-4">Добавить к себе<i
+                class="material-icons">exposure_plus_1</i></button>
+    </section>
+</div>
+<div id="parallax-world-of-ugg">
+    <div class="responsive-video controls left" style="margin-left: 30px">
+        <iframe width="840" height="480" src="../static/video/2.webm" allowfullscreen></iframe>
+    </div>
+    <br><br>
+    <section class="center">
+        <input type="text" name="time" id="time" value="1" hidden>
+        <h1>Без снаряжения</h1>
+        <hr>
+
+        <h3>Описание программы:</h3>
+        <h1 id="currentCounter">Стань сильнее и выносливее с этой программой тренировок с собственным весом</h1>
+
+        <h3>Сложность программы:</h3>
+        <h1 id="breakTimer">Средняя</h1>
+
+        <h3>Группы мышц:</h3>
+        <h1 id="breakTimer">Всё тело</h1>
+    </section>
+    <br>
+    <hr>
+    <section class="center">
+        <button id="button3" class="btn-large waves-effect waves-light pink lighten-4">Добавить к себе<i
+                class="material-icons">exposure_plus_1</i></button>
+    </section>
+</div>
+<div style="flex: 1 0 auto;" id="parallax-world-of-ugg">
+    <section style="margin: -50px">
+        <div class="title">
+            <h3>Тренировки с Couch&Coach</h3>
+            <h1>Создать свою программу</h1>
+        </div>
+    </section>
+    <section>
+        <div class="row container">
+            <form class="col s12">
+                <div class="row">
+                    <div class="input-field col s6 l6">
+                        <i class="material-icons prefix">border_color</i>
+                        <input id="icon_prefix" type="text" class="validate">
+                        <label for="icon_prefix">Название программы</label>
+                    </div>
+                    <br><br><br><br>
+                    <div class="input-field col s6 l6">
+                        <i class="material-icons prefix">build</i>
+                        <input id="" type="tel" class="validate">
+                        <label for="icon_telephone">Сложность</label>
+                    </div>
+                    <div class="input-field col s6 l6">
+                        <label> Выбор упражнений</label>
+                        <select class="browser-default">
+                            <option value="" disabled selected></option>
+                            <option value="1">Берпи</option>
+                            <option value="2">Приседания</option>
+                            <option value="3">Пресс</option>
+                            <option value="4">Отжимания</option>
+                            <option value="5">Выпады назад</option>
+                            <option value="6">Наклоны вперёд</option>
+                        </select>
+                    </div>
+                </div>
+                <br><br><br><br>
+                <section class="center">
+                    <button id="button3" class="btn-large waves-effect waves-light pink lighten-4">Создать
+                        свою программу
+                    </button>
+                </section>
+            </form>
+        </div>
+    </section>
+
+</div>
+
+{% endblock %}
