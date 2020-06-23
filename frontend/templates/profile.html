@@ -5,7 +5,7 @@
 <link rel="stylesheet"
       href="../static/css/UsProfileV.css">
 <link rel="stylesheet"
-      href="../static/css/forTable.less">
+      href="../static/css/BasePage.css">
 <script src="../static/js/forUserProf.js"></script>
 <link href='https://fonts.googleapis.com/css?family=Quicksand:400,500,700&subset=latin-ext' rel="stylesheet">
 {% endblock %}
@@ -75,7 +75,7 @@
             <div class="profile-card-social">
                 <div class="container">
                     <b>Старт базовой тренировки: </b>
-                    <a href="#" class="profile-card-social__item twitter"
+                    <a href="{{ url_for('training_page', tran_id=0) }}" class="profile-card-social__item twitter"
                        target="_blank">
                         <p class="icon-font">&#127789;</p>
                     </a>
@@ -91,7 +91,7 @@
                 <br>
                 <div class="container">
                     <b>Выбор новой программы: &nbsp; </b>
-                    <a href="#" class="profile-card-social__item twitter"
+                    <a href="{{ url_for('training') }}" class="profile-card-social__item twitter"
                        target="_blank">
                         <p class="icon-font">&#127831;</p>
                     </a>
@@ -129,8 +129,16 @@
         </symbol>
     </defs>
 </svg>
-{% if major %}
 
+{% if major %}
+<div id="parallax-world-of-ugg">
+    <section>
+        <div class="title">
+            <h3>Мои Упражнения</h3>
+            <h1>С Couch&Coach</h1>
+        </div>
+    </section>
+</div>
 <div class="container" id="myEx">
     <table class="striped highlight centered responsive-table">
         <thead>
@@ -148,11 +156,12 @@
         <tr>
             <td>{{ row[1] }}</td>
             <td>{{ row[3] }}</td>
-            <td>kek</td>
+            <td>{{ row[5] }}</td>
             <td>{{ row[2] }}</td>
             <td>
                 <button class="btn waves-effect waves-light indigo lighten-4" type="button"
-                        onclick="document.location='exercises/{{row[0]}}'">Go
+                        onclick="location.href='{{ url_for('ex_page', ex_id=row[0]) }}'">Go
+
                     <i class="material-icons right">send</i>
                 </button>
             </td>
@@ -164,10 +173,49 @@
 </div><br>
 {% endif %}
 
-<div class="responsive-video controls center">
-    <iframe width="840" height="480" src="../static/video/2.webm" allowfullscreen></iframe>
+{% if major2 %}
+<div id="parallax-world-of-ugg">
+    <section>
+        <div class="title">
+            <h3>Мои Программы</h3>
+            <h1>С Couch&Coach</h1>
+        </div>
+    </section>
 </div>
+<div class="container" id="myTran">
+    <table class="striped highlight centered responsive-table">
+        <thead>
+        <tr>
+            <th>Название упражнения</th>
+            <th>Кол-во выполнений</th>
+            <th>Общее время</th>
+            <th>Кол-во тренировок</th>
+            <th></th>
+        </tr>
+        </thead>
 
+        <tbody>
+        {% for row in records3 %}
+        <tr>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[3] }}</td>
+            <td>{{ row[4] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>
+                <button class="btn waves-effect waves-light indigo lighten-4" type="button"
+                        onclick="location.href='{{ url_for('training_page', tran_id=row[0]) }}'">Go
+
+                    <i class="material-icons right">send</i>
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <br>
+</div><br>
+{% endif %}
+<br><br><br><br><br><br><br>
 {% endblock %}
 
 {% block scripts %}

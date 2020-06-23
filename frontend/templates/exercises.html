@@ -16,7 +16,7 @@
     </section>
     {% for row in records %}
     <section>
-        <div class="parallax-one">
+        <div class="parallax-one" style="width: 100%; background-image: url(../static/images/sport_back/{{row[0]}}.jpg)">
             <h2>{{ row[1] }}</h2>
         </div>
     </section>
@@ -46,7 +46,8 @@
                 <i class="material-icons">add</i>
             </button>
         </form>
-    </div><br>
+    </div>
+    <br>
     {% endfor %}
     <div class="title">
         <h3>Start the changes</h3>
@@ -54,47 +55,10 @@
     </div>
 </div>
 
-
-<h3 class="center" style="color: white; font-family: 'Playfair Display', serif;">Упражнения</h3>
-{% for row in records %}
-<div class="container" style="display: flex; justify-content: center">
-    <div class="row">
-        <div class="col s12 m12 l4"></div>
-        <div class="col s12 m12 l4 " style="padding-bottom: 1.875rem">
-            <div class="card z-depth-5 hoverable">
-                <div class="card-image waves-effect waves-block waves-light">
-                    <img class="activator"
-                         src="../static/video/{{current_user.userGender}}/{{current_user.userLevel}}/{{current_user.userPhys}}/exPhoto/{{ row[0] }}.png">
-                </div>
-                <div class="card-content" style="font-family: 'Playfair Display', serif;">
-                    <span class="card-title activator grey-text text-darken-4">{{ row[1] }}
-                        <i class="material-icons right">more_vert</i>
-                    </span>
-                    <h5>Уровень:</h5> {{ row[3] }}
-                    <h5>Направленность:</h5> {{ row[4] }}
-                    <h5>Часть тела:</h5> {{ row[5] }}
-                    <hr>
-                    <h5>Необходимое кол-во баллов:</h5> {{ row[6] }}
-                </div>
-                <div class="card-reveal">
-                    <span class="card-title grey-text text-darken-4">{{ row[1] }}
-                        <i class="material-icons right">close</i>
-                    </span>
-                    <h5>Описание: {{ row[2] }}</h5>
-                </div>
-
-            </div>
-        </div>
-    </div>
-    <div class="col s12 m12 l4"></div>
-</div><br><br>
-{% endfor %}
-
 <script>
     function addEx(id) {
         var btn = document.getElementById(id);
         btn.disabled = true;
     }
-
 </script>
 {% endblock %}

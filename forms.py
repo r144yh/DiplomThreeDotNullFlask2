@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, RadioField, DecimalField, SelectField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, RadioField, DecimalField, SelectField, \
+    SelectMultipleField
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired, Length, Email, NumberRange, ValidationError, EqualTo
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -87,4 +88,17 @@ class ExercisePage(FlaskForm):
 class Training(FlaskForm):
     count = DecimalField('Кол-во повторений', validators=[NumberRange(min=0, max=300)])
     exId = DecimalField('Id')
+    submit = SubmitField('Добавить к себе')
+
+
+class CreateTraining(FlaskForm):
+    nameOfTran = StringField('Название программы')
+    complexity = SelectField('Выбор упражнений', choices=[('hard', 'Тяжелая тренировка'),
+                                                          ('medium', 'Средней сложности'),
+                                                          ('easy', 'Легкая тренировка')])
+    typeOfEx = SelectField('Выбор упражнений', coerce=int)
+    typeOfEx2 = SelectField('Выбор упражнений', coerce=int)
+    #typeOfEx3 = SelectField('Выбор упражнений', coerce=int)
+    # typeOfEx4 = SelectField('Выбор упражнений', coerce=int)
+    # typeOfEx5 = SelectField('Выбор упражнений', coerce=int)
     submit = SubmitField('Добавить к себе')

@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet"
+      href="../static/css/BasePage.css">
+{% endblock %}
+
+{% block content %}
+<div style="flex: 1 0 auto;" id="parallax-world-of-ugg">
+    <br>
+    <section style="margin: -50px">
+        <div class="title" class="input-field col s12 m12 l12">
+            <h3>Тренировки с Couch&Coach</h3>
+            <h1>Создать свою программу</h1>
+        </div>
+    </section>
+    <br><br><br><br>
+    <section>
+        <div class="row container">
+
+            <form action="" method="post" class="col s12">
+                {{ form.hidden_tag() }}
+                <div class="row">
+                    <div class="input-field col s12 m12 l12">
+                        <i class="material-icons prefix">border_color</i>
+                        {{ form.nameOfTran.label }}
+                        {{ form.nameOfTran() }}
+                    </div>
+                    <br><br><br><br>
+                    <div class="input-field col s12 m6 l6">
+                        <i class="material-icons prefix">build</i>
+                        <label>Сложность</label><br><br>
+                        {{ form.complexity(class="browser-default") }}
+                    </div>
+
+                    <div class="input-field col s12 m6 l6">
+                        {{ form.typeOfEx.label }}<br>
+                        <p id="type1">
+                            {{ form.typeOfEx(class="browser-default") }}
+                        </p>
+                        <section class="center" id="addBtn2">
+                            <p class="center">Добавить ещё одно упражнение:</p>
+                            <button class="btn-floating btn-small waves-effect waves-light indigo lighten-4 center"
+                                    type="button" onclick="addTran2()">
+                                <i class="material-icons">add</i>
+                            </button>
+                        </section>
+
+                        <p id="type2" hidden>
+                            {{ form.typeOfEx2(class="browser-default") }}
+                        </p>
+                        <section class="center" id="addBtn3" hidden>
+                            <p class="center">Добавить ещё одно упражнение:</p>
+                            <button class="btn-floating btn-small waves-effect waves-light indigo lighten-4 center"
+                                    type="button" onclick="addTran3()">
+                                <i class="material-icons">add</i>
+                            </button>
+                        </section>
+
+                    </div>
+                </div>
+                <br><br><br><br>
+                <section class="center">
+                    <button id="button3" type="submit" class="btn-large waves-effect waves-light pink lighten-4">Создать
+                        свою программу
+                    </button>
+
+                </section>
+                <br>
+            </form>
+        </div>
+    </section>
+</div>
+
+<script>
+    function addTran2() {
+        let typeOfEx2 = document.getElementById("type2");
+        let sect2 = document.getElementById("addBtn2");
+        let sect3 = document.getElementById("addBtn3");
+        sect2.hidden = true;
+        sect3.hidden = false;
+        typeOfEx2.hidden = false;
+
+    }
+
+    function addTran3() {
+        let typeOfEx3 = document.getElementById("type3");
+        let sect3 = document.getElementById("addBtn3");
+        let sect4 = document.getElementById("addBtn4");
+        sect3.hidden = true;
+        sect4.hidden = false;
+        typeOfEx3.hidden = false;
+    }
+
+    function addTran4() {
+        let typeOfEx4 = document.getElementById("type4");
+        let sect4 = document.getElementById("addBtn4");
+        let sect5 = document.getElementById("addBtn5");
+        sect4.hidden = true;
+        sect5.hidden = false;
+        typeOfEx4.hidden = false;
+    }
+
+    function addTran5() {
+        let typeOfEx5 = document.getElementById("type5");
+        let sect5 = document.getElementById("addBtn5");
+        sect5.hidden = true;
+        typeOfEx5.hidden = false;
+    }
+</script>
+{% endblock %}

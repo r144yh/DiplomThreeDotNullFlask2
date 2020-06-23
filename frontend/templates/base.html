@@ -8,7 +8,8 @@
 </title>
 {% block styles %}
 {{ super() }}
-<link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans&family=Playfair+Display:wght@600&display=swap"
+      rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,100&display=swap" rel="stylesheet">
 {% endblock %}
 
@@ -25,8 +26,8 @@ style = "display: flex;  min-height: 100vh; flex-direction: column;" class = "wh
 <nav class="white" style="font-family: 'Montserrat', sans-serif;">
     <div class="nav-wrapper">
         <b><a href="{{ url_for('index') }}" class="brand-logo center blue-grey-text">Co&Co</a></b>
-        <a href="#" data-target="mobile-demo" class="sidenav-trigger blue-grey-text"><i class="material-icons">menu</i></a>
-        <ul id="nav-mobile" class="left hide-on-med-and-down" >
+        <a href="#slide-out" data-target="slide-out" class="sidenav-trigger blue-grey-text"><i class="material-icons">menu</i></a>
+        <ul id="nav-mobile" class="left hide-on-med-and-down">
             <li><b><a href="{{ url_for('training') }}" class="blue-grey-text">Программы</a></b></li>
             <li><b><a href="{{ url_for('exercises') }}" class="blue-grey-text">Упражнения</a></b></li>
         </ul>
@@ -35,13 +36,40 @@ style = "display: flex;  min-height: 100vh; flex-direction: column;" class = "wh
             <li><b><a href="{{ url_for('login') }}" class="blue-grey-text">Вход</a></b></li>
             <li><b><a href="{{ url_for('registration') }}" class="blue-grey-text">Регистрация</a></b></li>
             {% else %}
-            <li><b><a href="{{ url_for('profile', user_id=current_user.id) }}" class="blue-grey-text">Начать тренировку</a></b></li>
-            <li><b><a href="{{ url_for('profile', user_id=current_user.id) }}" class="blue-grey-text">Профиль</a></b></li>
+            <li><b><a href="{{ url_for('createTraining') }}" class="blue-grey-text">Создать тренировку</a></b></li>
+            <li><b><a href="{{ url_for('profile', user_id=current_user.id) }}" class="blue-grey-text">Профиль</a></b>
+            </li>
             <li><b><a href="{{ url_for('logout') }}" class="blue-grey-text">Выход</a></b></li>
             {% endif %}
         </ul>
     </div>
 </nav>
+<ul id="slide-out" class="sidenav">
+    <li>
+        <div class="user-view">
+            <div class="background">
+                <img src="../static/images/sport_back/8.jpg">
+            </div>
+            <b><a href="{{ url_for('index') }}"><span class="white-text name center">Co&Co</span></a></b>
+        </div>
+    </li>
+    <li><a href="{{ url_for('training') }}"><i class="material-icons">all_inclusive</i>Программы</a></li>
+    <li><a href="{{ url_for('exercises') }}"><i class="material-icons">fitness_center</i>Упражнения</a></li>
+
+    <li>
+        <div class="divider"></div>
+    </li>
+    {% if current_user.is_anonymous %}
+    <li><a class="waves-effect" href="{{ url_for('login') }}"><i class="material-icons">fast_forward</i>Вход</a></li>
+    <li><a class="waves-effect" href="{{ url_for('registration') }}"><i class="material-icons">format_align_center</i>Регистрация</a></li>
+    {% else %}
+    <li><a class="waves-effect" href="{{ url_for('createTraining') }}"><i class="material-icons">exposure_plus_1</i>Создать
+        тренировку</a></li>
+    <li><a class="waves-effect" href="{{ url_for('profile', user_id=current_user.id) }}"><i
+            class="material-icons">face</i>Профиль</a></li>
+    <li><a class="waves-effect" href="{{ url_for('logout') }}"><i class="material-icons">fast_rewind</i>Выход</a></li>
+    {% endif %}
+</ul>
 {% endblock %}
 
 {% block content %}
@@ -55,11 +83,14 @@ style = "display: flex;  min-height: 100vh; flex-direction: column;" class = "wh
     <div class="container">
         <div class="row">
             <div class="col l6 s12">
-                <h5 class="white-text">Co&Co - More realistic than Sims</h5><hr>
-                <p class="grey-text text-lighten-4">Подборка состава тренировок и упражнений на основе личных предпочтений</p>
+                <h5 class="white-text">Co&Co - More realistic than Sims</h5>
+                <hr>
+                <p class="grey-text text-lighten-4">Подборка состава тренировок и упражнений на основе личных
+                    предпочтений</p>
             </div>
             <div class="col l4 offset-l2 s12">
-                <h5 class="white-text">О Couch & Coach</h5><hr>
+                <h5 class="white-text">О Couch & Coach</h5>
+                <hr>
                 <ul>
                     <li><a class="grey-text text-lighten-3" href="#!"> > Стандартные программы тренировок</a></li>
                     <li><a class="grey-text text-lighten-3" href="#!"> > Составление собственных тренировок</a></li>
@@ -71,7 +102,7 @@ style = "display: flex;  min-height: 100vh; flex-direction: column;" class = "wh
     </div>
     <div class="footer-copyright">
         <div class="container grey-text">
-          <p> &copy; Copyright 2020 by <a href="{{ url_for('index') }}" style="color: grey">Couch & Coach</a></p>
+            <p> &copy; Copyright 2020 by <a href="{{ url_for('index') }}" style="color: grey">Couch & Coach</a></p>
         </div>
     </div>
 </footer>
@@ -81,5 +112,9 @@ style = "display: flex;  min-height: 100vh; flex-direction: column;" class = "wh
 {{ super() }}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
+<script>
+    $(document).ready(function () {
+        $('.sidenav').sidenav();
+    })
+</script>
 {% endblock scripts %}

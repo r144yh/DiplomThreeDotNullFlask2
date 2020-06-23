@@ -2,7 +2,7 @@ from flask import Flask, render_template, flash, redirect, url_for, request, jso
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from config import Config
-from forms import LoginForm, RegistrationForm, EditProfileForm, Exercise, ExercisePage, Training
+from forms import LoginForm, RegistrationForm, EditProfileForm, Exercise, ExercisePage, Training, CreateTraining
 from models import User, MyDB
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_material import Material
@@ -33,6 +33,11 @@ def main():
 @app.route('/index')
 def index():
     return render_template('index.html')
+
+
+@app.route('/info')
+def info():
+    return render_template('info.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -87,7 +92,7 @@ def registration():
 @login_required
 def profile(user_id):
     if current_user.id != user_id:
-        return redirect(url_for('error_404'))
+        return redirect(url_for('info'))
     db_conn = MyDB()
     records = db_conn.query('SELECT username, email, height, weight, age, gender, level, levelBody,'
                             ' count_of_tran, date_of_reg '
@@ -100,7 +105,15 @@ def profile(user_id):
     major = True
     if records2 == []:
         major = False
-    return render_template('profile.html', title='Profile', records=records, rev=rev, records2=records2, major=major)
+    records3 = db_conn.query('SELECT user_tran.train_id, training.name_of_tran, count_of_workout, count_of_repeat, '
+                             'time_of_last_ex '
+                             'FROM user_tran NATURAL JOIN training '
+                             'WHERE user_id = %s', (current_user.id,))
+    major2 = True
+    if records3 == []:
+        major2 = False
+    return render_template('profile.html', title='Profile', records=records, rev=rev, records2=records2, major=major,
+                           records3=records3, major2=major2)
 
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
@@ -130,7 +143,7 @@ def edit_profile():
 @app.route("/exercises", methods=['GET', 'POST'])
 def exercises():
     if current_user.is_anonymous:
-        return redirect(url_for('index'))
+        return redirect(url_for('info'))
     else:
         form = Exercise()
         db_conn = MyDB()
@@ -143,18 +156,18 @@ def exercises():
                                 current_user.id)
         if form.validate_on_submit():
             db_conn.query(
-                'INSERT INTO user_exercise(user_ex_id, ex_id, user_id) '
-                'VALUES (DEFAULT, %s, %s)',
-                (form.exId.data, current_user.id))
+                'INSERT INTO user_exercise(user_ex_id, ex_id, user_id, time_of_last_ex) '
+                'VALUES (DEFAULT, %s, %s, %s)',
+                (form.exId.data, current_user.id, '00:00:00'))
             db_conn.db_commit()
             return redirect(url_for('profile', user_id=current_user.id))
     return render_template('exercises.html', title='Exercises', records=records, form=form)
 
 
-@app.route('/profile/exercises/<ex_id>', methods=['GET', 'POST'])
+@app.route('/exercises/<ex_id>', methods=['GET', 'POST'])
 def ex_page(ex_id):
     if current_user.is_anonymous:
-        return redirect(url_for('index'))
+        return redirect(url_for('info'))
     else:
         form = ExercisePage()
         db_conn = MyDB()
@@ -175,13 +188,76 @@ def ex_page(ex_id):
                 (current_user.id,))
             db_conn.db_commit()
             return redirect(url_for('profile', user_id=current_user.id))
-    return render_template('ex_page.html', title='Profile', records=records, form=form)
+        return render_template('ex_page.html', title='Profile', records=records, form=form)
 
 
 @app.route("/training", methods=['GET', 'POST'])
 def training():
-    form = Training()
-    return render_template('training.html', title='Exercises', form=form)
+    if current_user.is_anonymous:
+        return redirect(url_for('info'))
+    else:
+        form = Training()
+        return render_template('training.html', title='Training', form=form)
+
+
+@app.route("/createTraining", methods=['GET', 'POST'])
+def createTraining():
+    if current_user.is_anonymous:
+        return redirect(url_for('info'))
+    else:
+        db_conn = MyDB()
+        choices = db_conn.query('SELECT ex_id, name_of_ex FROM exercise')
+
+        form = CreateTraining()
+        form.typeOfEx.choices = choices
+        form.typeOfEx2.choices = choices
+        if form.validate_on_submit():
+            ansList = [form.typeOfEx.data, form.typeOfEx2.data, ]
+            # print(form.typeOfEx.data)
+            # print(form.typeOfEx2.data)
+            # print(form.typeOfEx3.data)
+
+            tranId = db_conn.query('INSERT INTO training(train_id, name_of_tran, user_tran) VALUES (DEFAULT, %s, '
+                                   'True) RETURNING train_id', (form.nameOfTran.data,))
+            db_conn.db_commit()
+            print(tranId)
+            print(ansList)
+            for ans in ansList:
+                db_conn.query('INSERT INTO exercise_tran(ex_id, train_id) VALUES(%s, %s)', (ans, tranId[0]))
+                db_conn.db_commit()
+            db_conn.query('INSERT INTO user_tran(user_tran_id, user_id, train_id, time_of_last_ex) VALUES(DEFAULT, '
+                          '%s, %s, %s)',
+                          (current_user.id, tranId[0], '00:00:00'))
+            db_conn.db_commit()
+            return redirect(url_for('profile', user_id=current_user.id))
+        return render_template('createTran.html', title='Create Training', form=form)
+
+
+@app.route('/training/<tran_id>', methods=['GET', 'POST'])
+def training_page(tran_id):
+    if current_user.is_anonymous:
+        return redirect(url_for('info'))
+    else:
+        form = ExercisePage()
+        db_conn = MyDB()
+        records = db_conn.query('SELECT * '
+                                'FROM training NATURAL JOIN user_tran  '
+                                'WHERE user_id = %s and train_id = %s',
+                                (current_user.id, tran_id))
+        if form.validate_on_submit():
+            db_conn.query(
+                'UPDATE user_tran SET count_of_repeat = count_of_repeat + %s, count_of_workout =  '
+                'count_of_workout + 1 '
+                'WHERE train_id = %s and user_id = %s ',
+                (form.count.data, tran_id, current_user.id))
+            db_conn.db_commit()
+            db_conn.query(
+                'UPDATE uuser SET count_of_tran = count_of_tran + 1, level = level + 20 '
+                'WHERE user_id = %s ',
+                (current_user.id,))
+            db_conn.db_commit()
+            return redirect(url_for('profile', user_id=current_user.id))
+        return render_template('training_page.html', title='Profile', records=records, form=form)
 
 
 if __name__ == '__main__':

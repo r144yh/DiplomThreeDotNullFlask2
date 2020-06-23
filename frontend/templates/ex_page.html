@@ -1,46 +1,81 @@
 {% extends "base.html" %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet"
+      href="../static/css/BasePage.css">
+{% endblock %}
 
 {% block content %}
-<div class="container" style="flex: 1 0 auto;">
+<div id="parallax-world-of-ugg">
+    <section>
+        <div class="title">
+            <h3>Тренировки</h3>
+            <h3>с Couch&Coach</h3>
+        </div>
+    </section>
+    {% for row in records %}
+    <section>
+        <div class="title" style="margin-top: -80px">
+            <h1>{{ row[1] }}</h1>
+        </div>
+    </section>
+    <div class="responsive-video controls left" style="margin-left: 30px">
+        <iframe width="840" height="480" src="../static/video/5.webm" allowfullscreen></iframe>
+    </div>
+    <br><br>
+    <section class="center">
+        <button class="btn-floating btn-large waves-effect waves-light teal accent-2 center" id="button"
+                onclick="addBut()">
+            <i class="material-icons">play_arrow</i>
+        </button>
+    </section>
+    <section class="center">
+        <input type="text" name="time" id="time" value="3" hidden>
+        <h3>Время для тренировки</h3>
+        <h1 id="timer"></h1>
+        <hr>
+
+        <h3>Текущее кол-во повторений:</h3>
+        <h1 id="currentCounter">0</h1>
+        <h3>Осталось выполнить:</h3>
+        <h1 id="totalCounter">15</h1>
+        <hr>
+
+        <h3>Время для отдыха</h3>
+        <button id="button2" class="btn-floating  waves-effect waves-light teal accent-2" disabled>
+            <i class="material-icons">pause</i>
+        </button>
+        <h1 id="breakTimer"></h1>
+    </section>
     <br>
-    <input type="text" name="time" id="time" value="1" hidden>
-    <br>
-    <button id="button" onclick="addBut()" class="btn waves-effect waves-light">Запустить</button>
-    <br>
-    <div id="timer"></div>
-    <br>
-    <div id="breakTimer"></div>
-    <br>
-    <button id="button2" class="btn waves-effect waves-light" disabled>Стоп</button>
-    <br>
-    <div>Текущее кол-во повторений:
-        <p id="currentCounter">0</p>
+    <hr>
+    <div class="center">
+        <button id="button3" class="btn-large waves-effect waves-light pink lighten-4">Закончить тренировку</button>
+        <p id="demo"></p>
     </div>
     <br>
-    <div>Осталось выполнить:
-        <p id="totalCounter">15</p>
-    </div>
-    <br>
-    <p id="demo"></p>
     <br>
     <br>
-    <button id="button3" class="btn waves-effect waves-light">Закончить тренировку</button>
     <br>
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p hidden id="countP">
             {{ form.count() }}
         </p>
-        <div hidden id="subBut">
+        <section hidden id="subBut" class="center">
             <p>
                 Потвердить кол-во повторений
             </p>
-            <button class="btn waves-effect waves-light" type="submit" name="action" style="margin: 0.85rem">Подтвердить
+            <button class="btn waves-effect waves-light pink lighten-4" type="submit" name="action" style="margin: 0.85rem">Подтвердить
                 <i class="material-icons right">restaurant</i>
             </button>
-        </div>
+        </section>
     </form>
-
+    {% endfor %}
+    <div class="title">
+        <h3>Start the changes</h3>
+        <h1>with yourself</h1>
+    </div>
 </div>
 <br>
 
