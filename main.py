@@ -6,6 +6,7 @@ from forms import LoginForm, RegistrationForm, EditProfileForm, Exercise, Exerci
 from models import User, MyDB
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_material import Material
+from datetime import date, datetime, timedelta
 import json
 
 app = Flask('__main__',
@@ -105,6 +106,8 @@ def profile(user_id):
     major = True
     if records2 == []:
         major = False
+    # if records2[0][6] > now - 30:
+
     records3 = db_conn.query('SELECT user_tran.train_id, training.name_of_tran, count_of_workout, count_of_repeat, '
                              'time_of_last_ex '
                              'FROM user_tran NATURAL JOIN training '
@@ -146,6 +149,7 @@ def exercises():
         return redirect(url_for('info'))
     else:
         form = Exercise()
+        now = date.today()
         db_conn = MyDB()
         records = db_conn.query('SELECT ex_id, name_of_ex, descr_of_ex, level_of_ex, type_of_ex, body_part, '
                                 'number_of_points '
@@ -156,9 +160,9 @@ def exercises():
                                 current_user.id)
         if form.validate_on_submit():
             db_conn.query(
-                'INSERT INTO user_exercise(user_ex_id, ex_id, user_id, time_of_last_ex) '
-                'VALUES (DEFAULT, %s, %s, %s)',
-                (form.exId.data, current_user.id, '00:00:00'))
+                'INSERT INTO user_exercise(user_ex_id, ex_id, user_id, time_of_last_ex, date_of_add) '
+                'VALUES (DEFAULT, %s, %s, %s, %s)',
+                (form.exId.data, current_user.id, '00:00:00', now))
             db_conn.db_commit()
             return redirect(url_for('profile', user_id=current_user.id))
     return render_template('exercises.html', title='Exercises', records=records, form=form)
@@ -170,21 +174,29 @@ def ex_page(ex_id):
         return redirect(url_for('info'))
     else:
         form = ExercisePage()
+        now = date.today()
         db_conn = MyDB()
         records = db_conn.query('SELECT * '
                                 'FROM exercise NATURAL JOIN user_exercise '
                                 'WHERE user_id = %s and ex_id = %s',
                                 (current_user.id, ex_id))
         if form.validate_on_submit():
+            timeEnd = datetime.strptime(form.timeOfEx.data, '%H:%M:%S').time()
+            # timeStart = db_conn.query('SELECT time_of_last_ex '
+            #                           'FROM user_exercise '
+            #                           'WHERE user_id = %s and ex_id = %s',
+            #                           (current_user.id, ex_id))
+            # newTime = str(timeStart[0][0].hour + timeEnd.hour) + ':' + str(
+            #     timeStart[0][0].minute + timeEnd.minute) + ':' + str(timeStart[0][0].second + timeEnd.second)
             db_conn.query(
                 'UPDATE user_exercise SET count_of_repeat = count_of_repeat + %s, count_of_workout =  '
-                'count_of_workout + 1 '
+                'count_of_workout + 1, date_of_ex = %s, time_of_last_ex = %s '
                 'WHERE ex_id = %s and user_id = %s ',
-                (form.count.data, ex_id, current_user.id))
+                (form.count.data, now, timeEnd, ex_id, current_user.id))
             db_conn.db_commit()
-            db_conn.query(
+            level = db_conn.query(
                 'UPDATE uuser SET count_of_tran = count_of_tran + 1, level = level + 20 '
-                'WHERE user_id = %s ',
+                'WHERE user_id = %s RETURNING level',
                 (current_user.id,))
             db_conn.db_commit()
             return redirect(url_for('profile', user_id=current_user.id))
@@ -196,8 +208,22 @@ def training():
     if current_user.is_anonymous:
         return redirect(url_for('info'))
     else:
-        form = Training()
-        return render_template('training.html', title='Training', form=form)
+        form = Exercise()
+        db_conn = MyDB()
+        records = db_conn.query('SELECT train_id, name_of_tran, complexity, descroftrain '
+                                'FROM training '
+                                'WHERE user_tran = FALSE and train_id NOT IN (SELECT train_id '
+                                'FROM user_tran '
+                                'WHERE user_id = %s)',
+                                current_user.id)
+        if form.validate_on_submit():
+            db_conn.query(
+                'INSERT INTO user_tran(user_tran_id, train_id, user_id, time_of_last_ex) '
+                'VALUES (DEFAULT, %s, %s, %s)',
+                (form.exId.data, current_user.id, '00:00:00'))
+            db_conn.db_commit()
+            return redirect(url_for('profile', user_id=current_user.id))
+    return render_template('training.html', title='Training', form=form, records=records)
 
 
 @app.route("/createTraining", methods=['GET', 'POST'])
@@ -211,17 +237,14 @@ def createTraining():
         form = CreateTraining()
         form.typeOfEx.choices = choices
         form.typeOfEx2.choices = choices
+        form.typeOfEx3.choices = choices
+        form.typeOfEx4.choices = choices
         if form.validate_on_submit():
-            ansList = [form.typeOfEx.data, form.typeOfEx2.data, ]
-            # print(form.typeOfEx.data)
-            # print(form.typeOfEx2.data)
-            # print(form.typeOfEx3.data)
-
-            tranId = db_conn.query('INSERT INTO training(train_id, name_of_tran, user_tran) VALUES (DEFAULT, %s, '
-                                   'True) RETURNING train_id', (form.nameOfTran.data,))
+            ansList = [form.typeOfEx.data, form.typeOfEx2.data, form.typeOfEx3.data, ]
+            tranId = db_conn.query('INSERT INTO training(train_id, name_of_tran, user_tran, complexity) VALUES ('
+                                   'DEFAULT, %s, '
+                                   'True, %s) RETURNING train_id', (form.nameOfTran.data, form.complexity.data))
             db_conn.db_commit()
-            print(tranId)
-            print(ansList)
             for ans in ansList:
                 db_conn.query('INSERT INTO exercise_tran(ex_id, train_id) VALUES(%s, %s)', (ans, tranId[0]))
                 db_conn.db_commit()
@@ -239,25 +262,31 @@ def training_page(tran_id):
         return redirect(url_for('info'))
     else:
         form = ExercisePage()
+        now = date.today()
         db_conn = MyDB()
-        records = db_conn.query('SELECT * '
-                                'FROM training NATURAL JOIN user_tran  '
+        records = db_conn.query('SELECT name_of_tran, complexity '
+                                'FROM user_tran NATURAL JOIN training '
                                 'WHERE user_id = %s and train_id = %s',
                                 (current_user.id, tran_id))
+        records2 = db_conn.query('SELECT * '
+                                 'FROM user_tran NATURAL JOIN exercise_tran NATURAL JOIN exercise '
+                                 'WHERE user_id = %s and train_id = %s',
+                                 (current_user.id, tran_id))
         if form.validate_on_submit():
+            timeEnd = datetime.strptime(form.timeOfEx.data, '%H:%M:%S').time()
             db_conn.query(
                 'UPDATE user_tran SET count_of_repeat = count_of_repeat + %s, count_of_workout =  '
-                'count_of_workout + 1 '
+                'count_of_workout + 1, date_of_train = %s, time_of_last_ex = %s '
                 'WHERE train_id = %s and user_id = %s ',
-                (form.count.data, tran_id, current_user.id))
+                (form.count.data, now, timeEnd, tran_id, current_user.id))
             db_conn.db_commit()
             db_conn.query(
-                'UPDATE uuser SET count_of_tran = count_of_tran + 1, level = level + 20 '
+                'UPDATE uuser SET count_of_tran = count_of_tran + 1, level = level + 50 '
                 'WHERE user_id = %s ',
                 (current_user.id,))
             db_conn.db_commit()
             return redirect(url_for('profile', user_id=current_user.id))
-        return render_template('training_page.html', title='Profile', records=records, form=form)
+        return render_template('training_page.html', title='Profile', records=records, form=form, records2=records2)
 
 
 if __name__ == '__main__':

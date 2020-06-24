@@ -13,97 +13,87 @@
             <h3>с Couch&Coach</h3>
         </div>
     </section>
-    {% for row in records %}
+    <br>
     <section>
         <div class="title" style="margin-top: -80px">
-            <h1>Глубокие приседания</h1>
+            <h1>{{records[0][0]}}</h1>
+            <h3>{{records[0][1]}}</h3>
         </div>
     </section>
-    <div class="responsive-video controls left" style="margin-left: 30px">
-        <iframe width="840" height="480" src="../static/video/6.webm" allowfullscreen></iframe>
+    <br>
+    {% for row in records2 %}
+    <br>
+    <section>
+        <div class="title" style="margin-top: -80px">
+            <h1>{{row[8]}}</h1>
+        </div>
+    </section>
+    <div class="responsive-video controls left"
+         style="margin: 0.125rem; max-width:840px; max-height:480px; min-width: 375px; min-height: 210px">
+        <video controls style="width: 100%; height: auto; max-height: 100%;">
+            <source src="../static/video/{{current_user.userGender}}/{{current_user.userLevel}}/{{current_user.userPhys}}/exVid/{{row[0]}}.webm"
+                    type="video/mp4">
+        </video>
     </div>
     <br><br>
     <section class="center">
-        <button class="btn-floating btn-large waves-effect waves-light teal accent-2 center" id="button"
-                onclick="addBut()">
+        <button class="btn-floating btn-large waves-effect waves-light teal accent-2 center" id="button{{row[0]}}"
+                name="{{row[0]}}"
+                onclick="addBut(name)">
             <i class="material-icons">play_arrow</i>
         </button>
     </section>
     <section class="center">
+        {% if row[13] == 'easy' %}
         <input type="text" name="time" id="time" value="3" hidden>
+        {% elif row[13] == 'medium' %}
+        <input type="text" name="time" id="time" value="4" hidden>
+        {% elif row[13] == 'hard' %}
+        <input type="text" name="time" id="time" value="5" hidden>
+        {% endif %}
         <h3>Время для тренировки</h3>
-        <h1 id="timer"></h1>
+        <h1 id="timer{{row[0]}}"></h1>
         <hr>
 
-        <h3>Текущее кол-во повторений:</h3>
-        <h1 id="currentCounter">0</h1>
+        <h3>Текущее кол-во</h3>
+        <h3 class="center">повторений:</h3>
+        <h1 id="currentCounter{{row[0]}}">0</h1>
         <h3>Осталось выполнить:</h3>
-        <h1 id="totalCounter">45</h1>
+        {% if current_user.userLevel == 'easy' %}
+        <h1 id="totalCounter{{row[0]}}">{{row[10]}}</h1>
+        {% elif current_user.userLevel == 'middle' %}
+        <h1 id="totalCounter{{row[0]}}">{{row[11]}}</h1>
+        {% elif current_user.userLevel == 'hard' %}
+        <h1 id="totalCounter{{row[0]}}">{{row[12]}}</h1>
+        {% endif %}
         <hr>
 
         <h3>Время для отдыха</h3>
-        <button id="button2" class="btn-floating  waves-effect waves-light teal accent-2" disabled>
+        <button id="button2{{row[0]}}" class="btn-floating  waves-effect waves-light teal accent-2" disabled>
             <i class="material-icons">pause</i>
         </button>
-        <h1 id="breakTimer"></h1>
+        <h1 id="breakTimer{{row[0]}}"></h1>
     </section>
     <br>
     <hr>
     <div class="center">
-        <button id="button3" class="btn-large waves-effect waves-light pink lighten-4">Закончить упражнение</button>
+        <button id="button3{{row[0]}}" class="btn-large waves-effect waves-light pink lighten-4">Закончить упражнение
+        </button>
         <p id="demo"></p>
     </div>
     <br>
-    <br>
-    <br>
-    <br>
-    <section>
-        <div class="title" style="margin-top: -80px">
-            <h1>Прыжки</h1>
-        </div>
-    </section>
-    <div class="responsive-video controls left" style="margin-left: 30px">
-        <iframe width="840" height="480" src="../static/video/7.webm" allowfullscreen></iframe>
-    </div>
-    <br><br>
-    <section class="center">
-        <button class="btn-floating btn-large waves-effect waves-light teal accent-2 center" id="button"
-                onclick="addBut()">
-            <i class="material-icons">play_arrow</i>
-        </button>
-    </section>
-    <section class="center">
-        <input type="text" name="time" id="time" value="2" hidden>
-        <h3>Время для тренировки</h3>
-        <h1 id="timer"></h1>
-        <hr>
-
-        <h3>Текущее кол-во повторений:</h3>
-        <h1 id="currentCounter">0</h1>
-        <h3>Осталось выполнить:</h3>
-        <h1 id="totalCounter">30</h1>
-        <hr>
-
-        <h3>Время для отдыха</h3>
-        <button id="button2" class="btn-floating  waves-effect waves-light teal accent-2" disabled>
-            <i class="material-icons">pause</i>
-        </button>
-        <h1 id="breakTimer"></h1>
-    </section>
-    <br>
-    <hr>
+    {% endfor %}
     <div class="center">
-        <button id="button3" class="btn-large waves-effect waves-light pink lighten-4">Закончить упражнение</button>
-        <p id="demo"></p>
+        <button id="buttonEnd" class="btn-large waves-effect waves-light pink lighten-4">Закончить тренировку</button>
+        <p id="demo2"></p>
     </div>
-    <br>
-    <br>
-    <br>
-    <br>
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p hidden id="countP">
             {{ form.count() }}
+        </p>
+        <p hidden id="timeP" class="center">
+            {{ form.timeOfEx(class="center") }}
         </p>
         <section hidden id="subBut" class="center">
             <p>
@@ -115,7 +105,6 @@
             </button>
         </section>
     </form>
-    {% endfor %}
     <div class="title">
         <h3>Start the changes</h3>
         <h1>with yourself</h1>
@@ -127,23 +116,26 @@
 <script>
     let timerInput = document.getElementById("time"); // Берём строку
     let timeMinut = parseInt(timerInput.value) * 60; //Устанавливем время
-    function addBut() {
+    let timeStart = new Date();
 
-        let buttonRun = document.getElementById("button");// Берём кнопку остановки таймера
-        let buttonStop = document.getElementById("button2");// Берём кнопку остановки таймера
-        let buttonStopEx = document.getElementById("button3");// Берём кнопку остановки тренировки
-        let timerShow = document.getElementById("timer"); // Берём блок для показа времени
-        let timerBreakShow = document.getElementById("breakTimer"); // Берём блок для показа времени
+    function addBut(name) {
+        let buttonRun = document.getElementById("button" + name);// Берём кнопку остановки таймера
+        let buttonStop = document.getElementById("button2" + name);// Берём кнопку остановки таймера
+        let buttonStopEx = document.getElementById("button3" + name);// Берём кнопку остановки тренировки
+        let buttonStopTran = document.getElementById("buttonEnd");// Берём кнопку остановки тренировки
+        let timerShow = document.getElementById("timer" + name); // Берём блок для показа времени
+        let timerBreakShow = document.getElementById("breakTimer" + name); // Берём блок для показа времени
         let countInput = document.getElementById("count"); // Берём строку
         let countP = document.getElementById("countP"); // Берём строку
+        let timeP = document.getElementById("timeOfEx"); // Берём строку
         let subBut = document.getElementById("subBut"); // Берём строку
 
-        let currentCounterStop = document.getElementById("currentCounter"); // Берём сколько осталось повторений
+        let currentCounterStop = document.getElementById("currentCounter" + name); // Берём сколько осталось повторений
 
-        let totalCounterStop = document.getElementById("totalCounter"); // Берём сколько осталось
+        let totalCounterStop = document.getElementById("totalCounter" + name); // Берём сколько осталось
 
 
-        let timeBreak = 10;
+        let timeBreak = 1;
         buttonStopEx.disabled = true;
 
         buttonStop.disabled = false;
@@ -172,10 +164,10 @@
         document.getElementById("demo").hidden = true;
         buttonStop.addEventListener('click', function () {
             clearInterval(timer);
-            if (totalCounterShow >= 5) {
-                currentCounterShow += 5;
+            if (totalCounterShow >= 15) {
+                currentCounterShow += 15;
                 currentCounterStop.innerHTML = currentCounterShow;
-                totalCounterShow -= 5;
+                totalCounterShow -= 15;
                 totalCounterStop.innerHTML = totalCounterShow;
                 buttonRun.disabled = false;
 
@@ -207,19 +199,28 @@
         });
 
         buttonStopEx.addEventListener('click', function () {
+            buttonStopEx.disabled = true;
+            countInput.setAttribute('value', currentCounterShow);
+
+        });
+
+        buttonStopTran.addEventListener('click', function () {
             totalCounter();
             timerBreakShow.hidden = true;
             subBut.hidden = false;
+            let timeEnd = new Date();
+            let Hours = timeEnd.getHours() - timeStart.getHours();
+            let Minutes = timeEnd.getMinutes() - timeStart.getMinutes();
+            let Seconds = Math.abs((timeEnd.getSeconds() - timeStart.getSeconds()));
+            let fullTime = Hours + ":" + Minutes + ":" + Seconds;
+            timeP.setAttribute('value', fullTime);
         });
 
         function totalCounter() {
             countInput.hidden = false;
             countP.hidden = false;
-            countInput.setAttribute('value', currentCounterShow);
         }
     }
-
-
 </script>
 
 {% endblock %}

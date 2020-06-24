@@ -15,6 +15,7 @@ class User(UserMixin):
         self.userLevel = self.getLevel(conn)
         self.userPhys = self.getPhys(conn)
         self.userGender = self.getGender(conn)
+        self.userPoint = self.getPoints(conn)
 
     def __repr__(self):
         return "%d" % self.id
@@ -35,6 +36,10 @@ class User(UserMixin):
         records = conn.query('SELECT weight FROM uuser WHERE user_id = %s', (self.id,))
         return records[0][0]
 
+    def getPoints(self, conn):
+        records = conn.query('SELECT level FROM uuser WHERE user_id = %s', (self.id,))
+        return records[0][0]
+
     def check_password(self, password):
         conn = MyDB()
         records = conn.query('SELECT ppassword FROM uuser WHERE user_id = %s', (self.id,))
@@ -42,7 +47,7 @@ class User(UserMixin):
 
     def getLevel(self, conn):
         records = conn.query('SELECT level FROM uuser WHERE user_id = %s', (self.id,))
-        if records[0][0] <= 300:
+        if records[0][0] <= 659:
             return 'easy'
         elif 700 <= records[0][0] < 1000:
             return 'middle'

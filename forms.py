@@ -82,6 +82,7 @@ class Exercise(FlaskForm):
 
 class ExercisePage(FlaskForm):
     count = DecimalField('Кол-во повторений', validators=[NumberRange(min=0, max=300)])
+    timeOfEx = StringField('Время программы')
     submit = SubmitField('Подтвердить')
 
 
@@ -98,7 +99,7 @@ class CreateTraining(FlaskForm):
                                                           ('easy', 'Легкая тренировка')])
     typeOfEx = SelectField('Выбор упражнений', coerce=int)
     typeOfEx2 = SelectField('Выбор упражнений', coerce=int)
-    #typeOfEx3 = SelectField('Выбор упражнений', coerce=int)
-    # typeOfEx4 = SelectField('Выбор упражнений', coerce=int)
+    typeOfEx3 = SelectField('Выбор упражнений', coerce=int)
+    typeOfEx4 = SelectField('Выбор упражнений', coerce=int)
     # typeOfEx5 = SelectField('Выбор упражнений', coerce=int)
     submit = SubmitField('Добавить к себе')

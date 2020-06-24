@@ -31,7 +31,8 @@
             <h3>Часть тела:</h3>
             <h1>{{ row[5] }}</h1>
             <p class="line-break margin-top-10"></p>
-            <h3>Необходимое кол-во баллов:</h3>
+            <h3>Необходимое</h3>
+            <h3>кол-во баллов:</h3>
             <h1>{{ row[6] }}</h1>
             <p class="line-break margin-top-10"></p><br>
             <h3>Добавить к себе:</h3>
@@ -41,10 +42,17 @@
         <form action="" method="post">
             {{ form.hidden_tag() }}
             <input type="hidden" name="exId" id="exId" value="{{ row[0] }}">
+            {% if current_user.userPoint < row[6] %}
+            <button class="btn-floating btn-large waves-effect waves-light indigo lighten-4 center"
+                    type="submit" name="action" disabled onclick="addEx(id)">
+                <i class="material-icons">add</i>
+            </button>
+            {% else %}
             <button class="btn-floating btn-large waves-effect waves-light indigo lighten-4 center"
                     type="submit" name="action" onclick="addEx(id)">
                 <i class="material-icons">add</i>
             </button>
+            {% endif %}
         </form>
     </div>
     <br>

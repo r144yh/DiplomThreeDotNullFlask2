@@ -7,27 +7,32 @@
 {% endblock %}
 
 {% block content %}
+<section id="parallax-world-of-ugg">
+    <div class="title">
+        <h3>Тренировки с </h3>
+        <h3>Couch&Coach</h3>
+        <h1>Программы тренировок</h1>
+    </div>
+</section>
+{% for row in records %}
+<br>
 <div id="parallax-world-of-ugg">
-    <section>
-        <div class="title">
-            <h3>Тренировки с Couch&Coach</h3>
-            <h1>Программы тренировок</h1>
-        </div>
-    </section>
-
-    <div class="responsive-video controls right" style="margin-left: 30px">
-        <iframe width="840" height="480" src="../static/video/2.webm" allowfullscreen></iframe>
+    <div class="responsive-video controls right"
+         style="margin: 0.125rem; max-width:840px; max-height:480px; min-width: 375px; min-height: 210px">
+        <video controls style="width: 100%; height: auto; max-height: 100%;">
+            <source src="../static/video/{{current_user.userGender}}/{{current_user.userLevel}}/{{current_user.userPhys}}/exVid/5.webm"
+                    type="video/mp4">
+        </video>
     </div>
     <br><br>
     <section class="center">
-        <h1>Утренняя зарядка</h1>
+        <h1>{{row[1]}}</h1>
         <hr>
         <h3>Описание программы:</h3>
-        <h1>Спорт и хороший сон всегда идут рука об руку. Запуская активный обмен веществ с самого
-            утра, вы создаете правильный баланс гормонов в теле, который необходим для здорового сна.</h1>
+        <h1>{{row[3]}}</h1>
 
         <h3>Сложность программы:</h3>
-        <h1>Лёгкая</h1>
+        <h1>{{row[2]}}</h1>
 
         <h3>Группы мышц:</h3>
         <h1>Всё тело</h1>
@@ -35,33 +40,20 @@
     <br>
     <hr>
     <section class="center">
-        <button class="btn-large waves-effect waves-light pink lighten-4">Добавить к себе<i
-                class="material-icons">exposure_plus_1</i></button>
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <input type="hidden" name="exId" id="exId" value="{{ row[0] }}">
+            <button class="btn-large waves-effect waves-light pink lighten-4" type="submit" name="action">Добавить к себе<i
+                    class="material-icons">exposure_plus_1</i></button>
+        </form>
     </section>
+
 </div>
-<div id="parallax-world-of-ugg">
-    <div class="responsive-video controls left" style="margin-left: 30px">
-        <iframe width="840" height="480" src="../static/video/2.webm" allowfullscreen></iframe>
-    </div>
-    <br><br>
-    <section class="center">
-        <h1>Без снаряжения</h1>
-        <hr>
-
-        <h3>Описание программы:</h3>
-        <h1>Стань сильнее и выносливее с этой программой тренировок с собственным весом</h1>
-
-        <h3>Сложность программы:</h3>
-        <h1>Средняя</h1>
-
-        <h3>Группы мышц:</h3>
-        <h1>Всё тело</h1>
-    </section>
-    <br>
-    <hr>
-    <section class="center">
-        <button class="btn-large waves-effect waves-light pink lighten-4">Добавить к себе<i
-                class="material-icons">exposure_plus_1</i></button>
-    </section>
+{% endfor %}
+<br><br>
+<div class="title center" id="parallax-world-of-ugg">
+    <h3>Start the changes</h3>
+    <h1>with yourself</h1>
 </div>
+<br><br>
 {% endblock %}
